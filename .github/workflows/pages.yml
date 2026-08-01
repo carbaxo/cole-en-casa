@@ -1,8 +1,11 @@
 name: Desplegar en GitHub Pages
 
+# Se escuchan todas las ramas y se filtra en el job: así el despliegue sigue a
+# la rama por defecto del repositorio se llame como se llame, y no se rompe si
+# más adelante se renombra a main.
 on:
   push:
-    branches: [main]
+    branches: ['**']
   workflow_dispatch:
 
 # Un solo despliegue a la vez; si llegan varios, se queda el último.
@@ -17,6 +20,11 @@ permissions:
 
 jobs:
   deploy:
+    # Solo publica la rama por defecto. Las demás se construyen igual pero no
+    # pisan el sitio en producción.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
     environment:
       name: github-pages
