@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Marca VIZLESSONS: la V de dos brazos con el corte superior horizontal. -->
+  <rect width="64" height="64" rx="13" fill="#0000ff"/>
+  <path d="M8,11L32,53L32,30.25L21,11Z" fill="#ffffff"/>
+  <path d="M56,11L32,53L32,30.25L43,11Z" fill="#9aa6ff"/>
+</svg>

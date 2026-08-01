@@ -1,0 +1,147 @@
+{
+  "titulo": "VIZLESSONS",
+  "descripcion": "Enciclopedia personal organizada por ramas del saber.",
+  "ramas": [
+    {
+      "slug": "filosofia",
+      "nombre": "Filosofía",
+      "signatura": "FIL",
+      "lema": "Las preguntas que no se dejan contestar del todo, y por qué merece la pena seguir haciéndolas.",
+      "descripcion": "La filosofía no acumula respuestas, afina preguntas. Esta rama recorre las herramientas (lógica, argumentación), la historia del pensamiento occidental de Tales a Sartre, y las grandes áreas en las que la disciplina se divide hoy: qué podemos saber, cómo debemos actuar y qué clase de cosa es una mente.",
+      "secciones": [
+        {
+          "titulo": "Fundamentos",
+          "articulos": [
+            {
+              "slug": "que-es-la-filosofia",
+              "titulo": "¿Qué es la filosofía?",
+              "resumen": "Una disciplina que se define por su método, no por su territorio: preguntar por los supuestos que las demás dan por hechos.",
+              "etiquetas": ["introducción", "método"],
+              "actualizado": "2026-08-01"
+            },
+            {
+              "slug": "logica",
+              "titulo": "Lógica: la anatomía del argumento",
+              "resumen": "Validez, verdad y forma. Qué hace que una inferencia funcione, con independencia de aquello de lo que hable.",
+              "etiquetas": ["lógica", "método", "deducción"],
+              "actualizado": "2026-08-01"
+            },
+            {
+              "slug": "argumentacion-y-falacias",
+              "titulo": "Argumentación y falacias",
+              "resumen": "El catálogo de errores que más veces se repiten, y por qué casi todos funcionan por parecerse a un argumento bueno.",
+              "etiquetas": ["lógica", "retórica", "crítica"],
+              "actualizado": "2026-08-01"
+            }
+          ]
+        },
+        {
+          "titulo": "Historia del pensamiento",
+          "articulos": [
+            {
+              "slug": "presocraticos",
+              "titulo": "Los presocráticos",
+              "resumen": "El paso del mito al logos: seis o siete griegos que decidieron explicar el mundo sin recurrir a los dioses.",
+              "etiquetas": ["antigüedad", "grecia", "cosmología"],
+              "actualizado": "2026-08-01"
+            },
+            {
+              "slug": "socrates-platon-aristoteles",
+              "titulo": "Sócrates, Platón y Aristóteles",
+              "resumen": "Tres generaciones seguidas que fijaron el vocabulario con el que Occidente ha discutido durante veinticuatro siglos.",
+              "etiquetas": ["antigüedad", "grecia", "metafísica", "ética"],
+              "actualizado": "2026-08-01"
+            },
+            {
+              "slug": "racionalismo-y-empirismo",
+              "titulo": "Racionalismo y empirismo",
+              "resumen": "Descartes contra Hume: si el conocimiento se construye desde la razón o se recoge de la experiencia.",
+              "etiquetas": ["modernidad", "epistemología"],
+              "actualizado": "2026-08-01"
+            },
+            {
+              "slug": "kant",
+              "titulo": "Kant y el giro copernicano",
+              "resumen": "La propuesta que rompió el empate: no es la mente la que se ajusta al mundo, sino el mundo conocido el que se ajusta a la mente.",
+              "etiquetas": ["modernidad", "epistemología", "ética"],
+              "actualizado": "2026-08-01"
+            },
+            {
+              "slug": "existencialismo",
+              "titulo": "Existencialismo y absurdo",
+              "resumen": "Qué queda por hacer cuando se acepta que la vida no viene con un manual: Kierkegaard, Heidegger, Sartre y Camus.",
+              "etiquetas": ["contemporánea", "libertad", "sentido"],
+              "actualizado": "2026-08-01"
+            }
+          ]
+        },
+        {
+          "titulo": "Grandes áreas",
+          "articulos": [
+            {
+              "slug": "epistemologia",
+              "titulo": "Epistemología: qué significa saber",
+              "resumen": "Creencia, verdad, justificación — y el contraejemplo de tres párrafos que en 1963 desmontó una definición de dos mil años.",
+              "etiquetas": ["epistemología", "conocimiento"],
+              "actualizado": "2026-08-01"
+            },
+            {
+              "slug": "etica",
+              "titulo": "Ética: las tres grandes familias",
+              "resumen": "Consecuencias, deberes o carácter. Tres formas incompatibles de responder a la misma pregunta: ¿qué debo hacer?",
+              "etiquetas": ["ética", "moral"],
+              "actualizado": "2026-08-01"
+            },
+            {
+              "slug": "filosofia-de-la-mente",
+              "titulo": "Filosofía de la mente",
+              "resumen": "El problema difícil de la conciencia: por qué explicar cómo funciona el cerebro no parece explicar por qué se siente algo.",
+              "etiquetas": ["mente", "conciencia", "contemporánea"],
+              "actualizado": "2026-08-01"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "fisica",
+      "nombre": "Física",
+      "signatura": "FIS",
+      "lema": "De la mecánica de Newton a los campos cuánticos: las reglas del juego, en el orden en que se descubrieron.",
+      "descripcion": "Rama en preparación.",
+      "secciones": []
+    },
+    {
+      "slug": "fluidodinamica",
+      "nombre": "Fluidodinámica",
+      "signatura": "FLU",
+      "lema": "Navier-Stokes, capa límite, turbulencia. El problema abierto más caro de la ingeniería.",
+      "descripcion": "Rama en preparación.",
+      "secciones": []
+    },
+    {
+      "slug": "mecanica",
+      "nombre": "Mecánica",
+      "signatura": "MEC",
+      "lema": "Sólidos, esfuerzos y máquinas: cómo se transmite una fuerza sin que nada se rompa.",
+      "descripcion": "Rama en preparación.",
+      "secciones": []
+    },
+    {
+      "slug": "matematicas",
+      "nombre": "Matemáticas",
+      "signatura": "MAT",
+      "lema": "El lenguaje que todas las demás ramas acaban tomando prestado.",
+      "descripcion": "Rama en preparación.",
+      "secciones": []
+    },
+    {
+      "slug": "historia",
+      "nombre": "Historia",
+      "signatura": "HIS",
+      "lema": "No lo que pasó, sino por qué acabó pasando eso y no otra cosa.",
+      "descripcion": "Rama en preparación.",
+      "secciones": []
+    }
+  ]
+}
