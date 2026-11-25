@@ -35,7 +35,7 @@ jobs:
       # El sitio es estático: no hay build. Se sube la raíz del repositorio
       # tal cual, con .nojekyll para que Pages no reprocese nada.
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: .
       - id: deployment
