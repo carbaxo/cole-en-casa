@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="var(--c3)">
+<title>Temes de l'Oliver</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Oliver">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{--bg:#eef3ff;--paper:#fff;--ink:#1c2547;--muted:#58628a;--line:#d8e0f5;--c1:#2f62ec;--c2:#ef5a4c;--c3:#14a37f;--c4:#9a4fd8;--star:#e98a14;
+--display:"Fredoka","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#111731;--paper:#1b2243;--ink:#eaeefc;--muted:#a6afd2;--line:#2e3866;--c1:#7e9eff;--c2:#ff8a7e;--c3:#4fd3ae;--c4:#c393f5;--star:#ffb257;color-scheme:dark}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+h1,h2{font-family:var(--display);margin:0;line-height:1.1;text-wrap:balance}
+h1{font-size:clamp(2.2rem,8vw,3.2rem);font-weight:700}
+p{margin:0}.muted{color:var(--muted)}
+.eyebrow{font-family:var(--display);font-weight:600;color:var(--cc,var(--c1))}
+.list{display:flex;flex-direction:column;gap:14px}
+.card{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:var(--ink);background:var(--paper);border:3px solid var(--line);border-left:14px solid var(--cc);border-radius:22px;padding:18px 20px}
+a.card:hover{border-color:var(--cc)}a.card:focus-visible,.back:focus-visible{outline:3px solid var(--cc);outline-offset:3px}
+.card .tag{font-weight:700;color:var(--cc);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase}
+.card .tt{font-family:var(--display);font-weight:700;font-size:1.9rem}
+.card.soon{border-style:dashed;border-left-style:solid;opacity:.85}
+.stars{color:var(--star);font-weight:700}
+.back{font-weight:700;color:var(--cc,var(--c1));text-decoration:none;width:fit-content}
+</style>
+</head>
+<body>
+<div class="wrap" style="--cc:var(--c3)">
+<a class="back" href="../">← Cole en casa</a>
+<span class="eyebrow">4t de primària</span>
+<h1>Hola, Oliver!</h1>
+<p class="muted">Aquí trobaràs els teus temes per estudiar.</p>
+<div class="list">
+  <div class="card soon" style="--cc:var(--c3)"><span class="tag">Properament</span><span class="tt">El teu primer tema</span><span class="muted">Molt aviat tindràs aquí els teus exercicis.</span></div>
+</div>
+</div>
+<script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script>
+</body>
+</html>

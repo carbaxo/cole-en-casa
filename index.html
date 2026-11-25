@@ -1,135 +1,44 @@
 <!doctype html>
-<html lang="es">
+<html lang="ca">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>VIZLESSONS — Enciclopedia personal</title>
-<meta name="description" content="Enciclopedia personal por ramas del saber: filosofía, física, fluidodinámica, mecánica, matemáticas e historia.">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#07070e" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="assets/img/icon-180.png">
-<link rel="manifest" href="site.webmanifest">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="VIZLESSONS">
-<meta property="og:description" content="Enciclopedia personal por ramas del saber.">
-
-<!-- Tipografias autoalojadas: ninguna peticion a terceros. Se precargan las
-     dos caras que aparecen en el primer pintado. -->
-<link rel="preload" href="assets/fonts/ibm-plex-sans-var-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/newsreader-400600-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/fonts.css">
-<link rel="stylesheet" href="assets/css/app.css">
-
-<script>
-  /* Fija el tema antes del primer pintado para que no haya destello. */
-  (function () {
-    // Marca que hay JS: las animaciones de entrada parten de opacidad 0 y solo
-    // deben hacerlo si alguien va a poder devolverlas a 1.
-    document.documentElement.classList.add('js');
-    try {
-      var t = localStorage.getItem('vz-theme');
-      if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
-    } catch (e) { /* almacenamiento bloqueado: se usa el tema del sistema */ }
-  })();
-</script>
+<meta name="theme-color" content="var(--c1)">
+<title>Cole en casa</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{--bg:#eef3ff;--paper:#fff;--ink:#1c2547;--muted:#58628a;--line:#d8e0f5;--c1:#2f62ec;--c2:#ef5a4c;--c3:#14a37f;--c4:#9a4fd8;--star:#e98a14;
+--display:"Fredoka","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#111731;--paper:#1b2243;--ink:#eaeefc;--muted:#a6afd2;--line:#2e3866;--c1:#7e9eff;--c2:#ff8a7e;--c3:#4fd3ae;--c4:#c393f5;--star:#ffb257;color-scheme:dark}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+h1,h2{font-family:var(--display);margin:0;line-height:1.1;text-wrap:balance}
+h1{font-size:clamp(2.2rem,8vw,3.2rem);font-weight:700}
+p{margin:0}.muted{color:var(--muted)}
+.eyebrow{font-family:var(--display);font-weight:600;color:var(--cc,var(--c1))}
+.list{display:flex;flex-direction:column;gap:14px}
+.card{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:var(--ink);background:var(--paper);border:3px solid var(--line);border-left:14px solid var(--cc);border-radius:22px;padding:18px 20px}
+a.card:hover{border-color:var(--cc)}a.card:focus-visible,.back:focus-visible{outline:3px solid var(--cc);outline-offset:3px}
+.card .tag{font-weight:700;color:var(--cc);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase}
+.card .tt{font-family:var(--display);font-weight:700;font-size:1.9rem}
+.card.soon{border-style:dashed;border-left-style:solid;opacity:.85}
+.stars{color:var(--star);font-weight:700}
+.back{font-weight:700;color:var(--cc,var(--c1));text-decoration:none;width:fit-content}
+</style>
 </head>
-
 <body>
-<a class="skip-link" href="#main">Saltar al contenido</a>
-
-<!-- Definiciones de la marca. Geometria calculada, no dibujada a mano: misma
-     construccion que la V de VIZPLAY, con el corte superior horizontal. -->
-<svg width="0" height="0" aria-hidden="true" focusable="false" class="svg-defs">
-  <symbol id="vz-mark" viewBox="0 0 64 64">
-    <path fill="var(--mark-a, #0000ff)" d="M8,11L32,53L32,30.25L21,11Z"/>
-    <path fill="var(--mark-b, #7a86ff)" d="M56,11L32,53L32,30.25L43,11Z"/>
-  </symbol>
-  <symbol id="vz-word" viewBox="0 0 848 100">
-    <g fill="var(--word-a, currentColor)">
-      <path d="M0,0L32.5,100L32.5,47.69L17,0ZM65,0L32.5,100L32.5,47.69L48,0Z"/>
-      <path d="M111,0L128,0L128,100L111,100Z"/>
-      <path d="M174,0L239,0L239,17L174,17ZM174,83L239,83L239,100L174,100ZM222,17L239,17L191,83L174,83Z"/>
-    </g>
-    <g fill="var(--word-b, #0000ff)">
-      <path d="M261,0L278,0L278,100L261,100ZM261,83L316.25,83L316.25,100L261,100Z"/>
-      <path d="M348,0L365,0L365,100L348,100ZM348,0L406.5,0L406.5,17L348,17ZM348,41.5L397.4,41.5L397.4,58.5L348,58.5ZM348,83L406.5,83L406.5,100L348,100Z"/>
-      <path d="M435,0L500,0L500,17L435,17ZM435,0L452,0L452,58.5L435,58.5ZM435,41.5L500,41.5L500,58.5L435,58.5ZM483,41.5L500,41.5L500,100L483,100ZM435,83L500,83L500,100L435,100Z"/>
-      <path d="M522,0L587,0L587,17L522,17ZM522,0L539,0L539,58.5L522,58.5ZM522,41.5L587,41.5L587,58.5L522,58.5ZM570,41.5L587,41.5L587,100L570,100ZM522,83L587,83L587,100L522,100Z"/>
-      <path d="M609,0L674,0L674,17L609,17ZM609,83L674,83L674,100L609,100ZM609,0L626,0L626,100L609,100ZM657,0L674,0L674,100L657,100Z"/>
-      <path d="M696,0L713,0L713,100L696,100ZM744,0L761,0L761,100L744,100ZM696,0L713,0L761,100L744,100Z"/>
-      <path d="M783,0L848,0L848,17L783,17ZM783,0L800,0L800,58.5L783,58.5ZM783,41.5L848,41.5L848,58.5L783,58.5ZM831,41.5L848,41.5L848,100L831,100ZM783,83L848,83L848,100L783,100Z"/>
-    </g>
-  </symbol>
-</svg>
-
-<div class="read-progress" id="read-progress" aria-hidden="true"><span></span></div>
-
-<header class="topbar">
-  <button class="icon-btn drawer-btn" id="drawer-btn" aria-label="Abrir navegación" aria-expanded="false" aria-controls="rail">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-  </button>
-
-  <!-- La marca y la primera letra del logotipo son la misma V. La regla
-       separadora deja claro que son dos piezas —icono y logotipo— y no un
-       tartamudeo. -->
-  <a class="brand" href="#/" aria-label="VIZLESSONS — inicio">
-    <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><use href="#vz-mark"/></svg>
-    <span class="brand-rule" aria-hidden="true"></span>
-    <svg class="brand-word" viewBox="0 0 848 100" aria-hidden="true"><use href="#vz-word"/></svg>
-  </a>
-
-  <div class="topbar-actions">
-    <button class="search-trigger" id="search-trigger">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg>
-      <span class="search-trigger__label">Buscar en la enciclopedia</span>
-      <kbd class="search-trigger__kbd"><span data-kbd-mod>Ctrl</span> K</kbd>
-    </button>
-    <button class="icon-btn" id="theme-btn" aria-label="Cambiar tema">
-      <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.6M12 19.4V22M2 12h2.6M19.4 12H22M4.9 4.9l1.9 1.9M17.2 17.2l1.9 1.9M19.1 4.9l-1.9 1.9M6.8 17.2l-1.9 1.9"/></svg>
-      <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.4 8.4 0 0 1 9.8 4 8.4 8.4 0 1 0 20 14.2Z"/></svg>
-    </button>
-  </div>
-</header>
-
-<div class="shell">
-  <nav class="rail" id="rail" aria-label="Ramas del saber"></nav>
-  <div class="rail-scrim" id="rail-scrim" hidden></div>
-  <main class="main" id="main" tabindex="-1"></main>
+<div class="wrap" style="--cc:var(--c1)">
+<span class="eyebrow">Cole en casa</span>
+<h1>Qui estudia avui?</h1>
+<p class="muted">Tria el teu nom per veure els teus temes.</p>
+<div class="list">
+  <a class="card" href="mario/" style="--cc:var(--c1)"><span class="tag">6è de primària</span><span class="tt">Mario</span><span class="muted">Català: pronoms febles</span></a>
+  <a class="card" href="oliver/" style="--cc:var(--c3)"><span class="tag">4t de primària</span><span class="tt">Oliver</span><span class="muted">Els teus temes</span></a>
+</div>
 </div>
 
-<footer class="site-foot">
-  <div class="site-foot__inner">
-    <svg class="foot-mark" viewBox="0 0 64 64" aria-hidden="true"><use href="#vz-mark"/></svg>
-    <p class="foot-note">
-      <strong>VIZLESSONS</strong> — enciclopedia personal. Cada rama crece por acumulación:
-      un archivo de texto por artículo, una entrada en el índice.
-    </p>
-    <p class="foot-meta" id="foot-meta"></p>
-  </div>
-</footer>
-
-<div class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Buscar" hidden>
-  <div class="palette__scrim" data-close></div>
-  <div class="palette__panel" role="none">
-    <div class="palette__field">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg>
-      <input id="palette-input" type="search" placeholder="Buscar artículos, ramas, conceptos…"
-             autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Término de búsqueda"
-             aria-controls="palette-results" role="combobox" aria-expanded="true">
-      <button class="palette__close" data-close aria-label="Cerrar búsqueda">Esc</button>
-    </div>
-    <div class="palette__results" id="palette-results" role="listbox" aria-label="Resultados"></div>
-    <div class="palette__foot">
-      <span><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
-      <span><kbd>↵</kbd> abrir</span>
-      <span><kbd>Esc</kbd> cerrar</span>
-    </div>
-  </div>
-</div>
-
-<script type="module" src="assets/js/app.js"></script>
 </body>
 </html>
