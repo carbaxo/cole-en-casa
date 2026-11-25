@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#a9b8c8">
 <script src="../gate.js" data-kid="mario"></script>
-<title>Escriptori delMario</title>
+<title>Escriptori del Mario</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -14,62 +14,54 @@
 <link rel="stylesheet" href="../shared/glass.css">
 </head>
 <body>
-<div class="app" style="--cc:#5872c9">
-  <aside class="side">
-    <div class="who">
-      <div class="avatar" aria-hidden="true">M<img src="../img/mario-avatar.png" alt="" onerror="this.remove()"></div>
-      <div><div class="hi">Hola, Mario!</div><div class="grade">6è de primària</div></div>
-    </div>
-    <nav class="nav" aria-label="Menú">
-      <a class="on" href="./"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Escriptori</a>
-      <a href="pronoms-febles/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M8 7h7"/></svg>Pronoms febles</a>
-      <span class="soon" style="display:flex;align-items:center;gap:12px;padding:11px 14px;font-weight:800"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Anglès · aviat</span>
-    </nav>
-    <div class="out"><button type="button" onclick="cecLock()" aria-label="Tanca la sessió"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4"/><path d="M10 17l-5-5 5-5M5 12h11"/></svg><span class="lbl">Tanca la sessió</span></button></div>
-  </aside>
-  <main class="main">
-    <div class="topbar"><h1 class="pagetitle">El meu escriptori</h1><a class="back" href="../">← Cole en casa</a></div>
-    <section class="hero">
-      <div class="txt">
-        <h2 id="greet">Hola, Mario!</h2>
-        <p id="heroSub">Preparat per aprendre una mica avui?</p>
-        <a class="pill" id="heroBtn" href="pronoms-febles/" ><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg><span>Continua: Pronoms febles</span></a>
-      </div>
-      <div class="art"><span class="orb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.3L20 10l-5.8 1.7L12 18l-2.2-6.3L4 10l5.8-1.7z"/><circle cx="19" cy="19" r="2"/></svg></span><img src="../img/mario-hero.png" alt="" onerror="this.remove()" style="position:absolute;inset:0"></div>
-    </section>
-    <section class="stats" aria-label="El meu progrés">
-      <div class="stat" style="--tint:rgba(143,196,182,.55)"><span class="icotile"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg></span><span class="lbl">Estrelles</span><span class="num" id="sStars">0</span><span class="sub" id="sStarsSub">de 0</span></div>
-      <div class="stat" style="--tint:rgba(229,236,243,.5)"><span class="icotile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="6"/><path d="M8.5 10L6 3h4l2 4 2-4h4l-2.5 7"/><path d="M12 12.5v5"/></svg></span><span class="lbl">Nivells superats</span><span class="num" id="sLevels">0</span><span class="sub" id="sLevelsSub">de 0</span></div>
-      <div class="stat" style="--tint:rgba(219,232,243,.75)"><span class="icotile"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s5 4.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-4 1.5-4s.5 2.5 2.5 3c0-4 1-6.5 1-9z"/></svg></span><span class="lbl">Ratxa</span><span class="num" id="sStreak">1</span><span class="sub" id="sStreakSub">dia seguit</span></div>
-      <div class="stat" style="--tint:rgba(148,151,207,.55)"><span class="icotile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg></span><span class="lbl">Temes</span><span class="num">1</span><span class="sub">220 exercicis</span></div>
-    </section>
-    <h2>Els meus temes</h2>
-    <section class="topics" id="topics"><div class="glass topic soon-card"><span class="icotile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span><span class="meta"><span class="tt">Anglès</span><span class="sub">Aviat: gramàtica i vocabulari</span></span></div></section>
-  </main>
-</div>
+<!-- Per afegir un tema: posa'l dins de l'assignatura que toqui (topics). -->
 <script>
-const KID="mario",TOPICS=[{"href": "pronoms-febles/", "title": "Pronoms febles", "subject": "Català", "icon": "book", "color": "#5872c9", "key": "pf-kids-v2", "levels": 10, "ex": 220}];
-const PLAY="<svg viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M7 4.5v15l13-7.5z\"/></svg>",ICONS={"book": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z\"/><path d=\"M4 21V5\"/><path d=\"M8 7h7\"/></svg>", "globe": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18\"/></svg>"};
-function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return{}}}
-/* ratxa de dies seguits */
-let streak=1;
-try{const key='cec-days-'+KID,today=new Date().toISOString().slice(0,10);let days=JSON.parse(localStorage.getItem(key)||'[]');
-  if(!days.includes(today))days.push(today);days=days.slice(-60);localStorage.setItem(key,JSON.stringify(days));
-  streak=0;let d=new Date(today);while(days.includes(d.toISOString().slice(0,10))){streak++;d.setDate(d.getDate()-1)}}catch(e){}
-let stars=0,maxStars=0,lv=0,maxLv=0;const box=document.getElementById('topics');
-TOPICS.slice().reverse().forEach(t=>{
-  const b=read(t.key),s=Object.values(b).reduce((a,x)=>a+x,0),l=Object.values(b).filter(x=>x>0).length;
-  stars+=s;maxStars+=t.levels*3;lv+=l;maxLv+=t.levels;
-  const a=document.createElement('a');a.className='glass topic';a.href=t.href;a.style.setProperty('--cc',t.color);
-  a.innerHTML=`<span class="icotile">${ICONS[t.icon]}</span><span class="meta"><span class="tt">${t.title}</span><span class="sub">${t.subject} · ★ ${s} de ${t.levels*3}</span><span class="bar" aria-hidden="true"><span style="width:${s/(t.levels*3)*100}%"></span></span></span><span class="play">${PLAY}</span>`;
-  box.prepend(a);
-});
-document.getElementById('sStars').textContent=stars;document.getElementById('sStarsSub').textContent='de '+maxStars;
-document.getElementById('sLevels').textContent=lv;document.getElementById('sLevelsSub').textContent='de '+maxLv;
-document.getElementById('sStreak').textContent=streak;document.getElementById('sStreakSub').textContent=streak===1?'dia seguit':'dies seguits';
-const h=new Date().getHours();document.getElementById('greet').textContent=(h<14?'Bon dia':h<21?'Bona tarda':'Bona nit')+', '+"Mario"+'!';
-if(!TOPICS.length)document.getElementById('heroSub').textContent='Molt aviat tindràs aquí els teus primers temes.';
+window.ESCRIPTORI={
+ "kid": "mario",
+ "name": "Mario",
+ "grade": "6è de primària",
+ "color": "#5872c9",
+ "subjects": [
+  {
+   "id": "catala",
+   "name": "Català",
+   "short": "Ca",
+   "color": "#c76a62",
+   "topics": [
+    {
+     "href": "catala/pronoms-febles/",
+     "title": "Pronoms febles",
+     "sub": "Targetes, trucs i 220 exercicis",
+     "key": "pf-kids-v2",
+     "levels": 10,
+     "ex": 220
+    }
+   ]
+  },
+  {
+   "id": "castella",
+   "name": "Castellà",
+   "short": "Es",
+   "color": "#d39a3c",
+   "topics": []
+  },
+  {
+   "id": "angles",
+   "name": "Anglès",
+   "short": "En",
+   "color": "#4f73c4",
+   "topics": []
+  },
+  {
+   "id": "mates",
+   "name": "Matemàtiques",
+   "short": "÷×",
+   "color": "#3a9585",
+   "topics": []
+  }
+ ]
+};
 </script>
-<script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script>
+<script src="../shared/escriptori.js"></script>
 </body>
 </html>

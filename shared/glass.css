@@ -201,3 +201,23 @@ html[data-kid] .home-wrap h1{margin-top:4px}
   html[data-kid] .pagetitle{font-size:1.6rem}
 }
 html[data-kid] [hidden]{display:none!important}
+
+/* ---------- assignatures ---------- */
+html[data-kid] .subjects{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+html[data-kid] .subject{display:flex;flex-direction:column;gap:8px;padding:18px;text-decoration:none;color:var(--ink);min-width:0}
+html[data-kid] .subject .tt{font-family:var(--display);font-weight:900;font-size:1.25rem;margin-top:4px}
+html[data-kid] .subject .sub{font-size:.88rem;font-weight:700;color:var(--muted)}
+html[data-kid] .subject .bar{height:8px}
+html[data-kid] .subject:hover{transform:translateY(-3px)}
+html[data-kid] .subject{transition:transform .2s ease}
+html[data-kid] .subject .bar span,html[data-kid] .topic .bar span{background:linear-gradient(90deg,color-mix(in srgb,var(--cc) 70%,#fff),var(--cc))}
+html[data-kid] .navico{flex:none;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font-size:.72rem;font-weight:900;color:#fff;background:var(--cc);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+html[data-kid] .subjhead{display:flex;align-items:center;gap:18px;padding:22px}
+html[data-kid] .subjhead .icotile{width:72px;height:72px;border-radius:22px;font-size:1.8rem}
+html[data-kid] .empty{display:flex;align-items:center;gap:16px;padding:22px;grid-column:1/-1}
+html[data-kid] .empty h2{font-size:1.2rem}
+@media (max-width:1000px){html[data-kid] .subjects{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){
+  html[data-kid] .nav{display:flex;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;width:100%;order:3;gap:6px;padding-bottom:2px}
+  html[data-kid] .nav a{flex:none;padding:8px 12px;font-size:.9rem}
+}

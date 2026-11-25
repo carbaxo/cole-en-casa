@@ -2,13 +2,13 @@
 <html lang="ca" data-kid="mario">
 <head>
 <meta charset="utf-8">
-<script src="../../gate.js" data-kid="mario"></script>
+<script src="../../../gate.js" data-kid="mario"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2f62ec">
 <meta name="description" content="La web d’estudi del Mario: pronoms febles en català amb targetes, trucs i 220 exercicis.">
-<link rel="manifest" href="../manifest.webmanifest">
-<link rel="icon" href="../icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="../icon-192.png">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="icon" href="../../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Mario">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -133,13 +133,13 @@ details{display:flex;flex-direction:column;gap:10px}
 .stage .truc h3{font-size:1.6rem}
 </style>
 
-<link rel="stylesheet" href="../../shared/glass.css">
+<link rel="stylesheet" href="../../../shared/glass.css">
 </head>
 <body>
 <div class="wrap">
 <div class="view" id="v-home">
 <header>
-  <a class="backhub" href="../">← Els meus temes</a>
+  <a class="backhub" href="../../#catala">← Català</a>
   <span class="hello">La web d'estudi del Mario · Català</span>
   <h1>Pronoms febles</h1>
   <p class="muted"><b>Hola, Mario!</b> Fes-ho pas a pas: primer aprèn, després mira els trucs i al final juga. Toca <b>Escolta</b> per sentir-ho en veu alta.</p>
@@ -706,6 +706,6 @@ show(VIEWS.includes(h)?h:'home');
 addEventListener('hashchange',()=>{const k=location.hash.slice(1)||'home';if(VIEWS.includes(k))show(k)});
 </script>
 
-<script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('../sw.js').catch(()=>{}))}</script>
+<script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('../../sw.js').catch(()=>{}))}</script>
 </body>
 </html>
