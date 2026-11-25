@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#a9b8c8">
 <title>Cole en casa</title>
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cole en casa">
 <link rel="stylesheet" href="shared/glass.css">
 </head>
 <body>
@@ -18,5 +22,6 @@
     <a class="glass profile" href="oliver/"><span class="avatar" style="--cc:#3a9585" aria-hidden="true">O<img src="img/oliver-avatar.png" alt="" onerror="this.remove()"></span><span class="tt">Oliver</span><span class="grade">4t de primària</span></a>
   </div>
 </div>
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
 </body>
 </html>

@@ -7,7 +7,7 @@ Web estàtica, sense build. Cada canvi a `main` es publica sol a GitHub Pages.
 ## Estructura
 
 ```
-index.html              inici: «Qui estudia avui?»
+index.html              inici: «Qui estudia avui?» (app instal·lable: manifest.webmanifest, sw.js, icon-*.png)
 gate.js                 contrasenya de cada nen (mario / oliver)
 shared/glass.css        aspecte de tota la web
 shared/escriptori.js    escriptori de cada nen (assignatures, progrés)
