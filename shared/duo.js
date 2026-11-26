@@ -23,7 +23,10 @@ const COL=['--c1','--c3','--c5','--c4','--c2'];
 /* ---------- progrés ---------- */
 let best={};
 try{best=JSON.parse(localStorage.getItem(C.key)||'{}')||{}}catch(e){}
-const save=()=>{try{localStorage.setItem(C.key,JSON.stringify(best))}catch(e){}};
+const load=()=>{try{const o=JSON.parse(localStorage.getItem(C.key)||'{}')||{};for(const k in o)best[k]=Math.max(best[k]||0,o[k])}catch(e){}};
+const save=()=>{load();try{localStorage.setItem(C.key,JSON.stringify(best))}catch(e){}};
+/* progrés nou d'un altre dispositiu (shared/sync.js): si som al camí, el tornem a pintar */
+addEventListener('cec-sync',()=>{load();if(!location.hash.includes('/'))route()});
 const starRow=(n,cls='')=>`<span class="d-stars ${cls}" aria-label="${n} de 3 estrelles">${[0,1,2].map(i=>`<span class="${i<n?'on':''}">★</span>`).join('')}</span>`;
 
 /* ---------- veu i sons ---------- */

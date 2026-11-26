@@ -8,9 +8,20 @@
   };
   var me=document.currentScript, kid=me&&me.getAttribute('data-kid'), K=KIDS[kid];
   if(!K)return;
-  var KEY='cec-unlock-'+kid;
-  function isOpen(){try{return localStorage.getItem(KEY)==='1'}catch(e){return false}}
-  window.cecLock=function(){try{localStorage.removeItem(KEY)}catch(e){};location.reload()};
+  var KEY='cec-unlock-'+kid, TK='cec-sync-'+kid, TRY='cec-sync-try-'+kid;
+  function home(){var s=me.getAttribute('src')||'';return s.replace(/gate\.js.*$/,'')||'./'}
+  /* sincronització amb el NUC (shared/sync.js) */
+  window.CEC_KID=kid;
+  var sy=document.createElement('script');sy.src=home()+'shared/sync.js';document.head.appendChild(sy);
+  function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  /* obert = contrasenya posada en aquest dispositiu i, si hi ha connexió, sessió al NUC
+     (si el NUC no respon, no es torna a demanar fins al cap de 12 hores) */
+  function isOpen(){
+    if(get(KEY)!=='1')return false;
+    if(get(TK)||!navigator.onLine)return true;
+    return Date.now()-(+get(TRY)||0)<12*3600e3;
+  }
+  window.cecLock=function(){try{localStorage.removeItem(KEY);localStorage.removeItem(TK)}catch(e){};location.reload()};
   if(isOpen())return;
 
   var root=document.documentElement;root.classList.add('cec-locked');
@@ -30,8 +41,6 @@
   document.head.appendChild(st);
 
   async function sha(t){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
-  function home(){var s=me.getAttribute('src')||'';return s.replace(/gate\.js.*$/,'')||'./'}
-
   function build(){
     var g=document.createElement('div');g.id='cec-gate';
     g.innerHTML='<form autocomplete="off"><div class="lock" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>'+
@@ -46,7 +55,12 @@
       e.preventDefault();
       var ok=false;
       try{ok=(await sha(inp.value.trim().toLowerCase()))===K.hash}catch(x){ok=inp.value.trim().toLowerCase()===kid}
-      if(ok){try{localStorage.setItem(KEY,'1')}catch(x){};root.classList.remove('cec-locked');g.remove()}
+      if(ok){
+        var pw=inp.value;
+        try{localStorage.setItem(KEY,'1')}catch(x){};root.classList.remove('cec-locked');g.remove();
+        var done=window.cecSyncLogin?await window.cecSyncLogin(pw):false;
+        if(!done)try{localStorage.setItem(TRY,String(Date.now()))}catch(x){}
+      }
       else{err.textContent='Aquesta no és la contrasenya. Torna-ho a provar!';inp.value='';inp.focus()}
     });
   }

@@ -108,6 +108,8 @@ dlg.querySelectorAll('.avopt').forEach(b=>b.addEventListener('click',()=>{
   avbtn.querySelector('img')?.remove();avbtn.insertAdjacentHTML('beforeend',avImg());avbtn.append(avbtn.querySelector('.avedit'));
   dlg.close();
 }));
+const recount=()=>{try{const days=JSON.parse(localStorage.getItem('cec-days-'+C.kid)||'[]'),d=new Date();streak=0;while(days.includes(d.toISOString().slice(0,10))){streak++;d.setDate(d.getDate()-1)}}catch(e){}};
+addEventListener('cec-sync',()=>{recount();route();avbtn.querySelector('img')?.remove();avbtn.insertAdjacentHTML('beforeend',avImg());avbtn.append(avbtn.querySelector('.avedit'))});
 addEventListener('hashchange',route);route();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 })();
