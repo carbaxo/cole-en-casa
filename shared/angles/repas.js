@@ -7,10 +7,10 @@ window.REPAS=[
 {id:"be",title:"To be",sub:"am · is · are",img:"wave",
  learn:[
   {img:"wave",t:"Ser i estar: to be",p:"En anglès, <b>ser</b> i <b>estar</b> són el mateix verb: <b>to be</b>.",
-   ex:[["I am Mario.","Sóc el Mario."],["I am happy.","Estic content."],["The cat is in the garden.","El gat és al jardí."]],
+   ex:[["I am Mario.","Soc el Mario."],["I am happy.","Estic content."],["The cat is in the garden.","El gat és al jardí."]],
    tip:"Un sol verb per a dues coses. Fàcil, oi?"},
   {img:"people",t:"am · is · are",p:"Canvia segons qui fa l'acció:",
-   ex:[["I am","jo sóc / estic"],["you are","tu ets / estàs"],["he is · she is","ell és · ella és"],["it is","és (una cosa o un animal)"],["we are","nosaltres som"],["you are","vosaltres sou"],["they are","ells / elles són"]],
+   ex:[["I am","jo soc / estic"],["you are","tu ets / estàs"],["he is · she is","ell és · ella és"],["it is","és (una cosa o un animal)"],["we are","nosaltres som"],["you are","vosaltres sou"],["they are","ells / elles són"]],
    tip:"<b>I</b> → am. <b>He, she, it</b> → is. <b>You, we, they</b> → are."},
   {img:"cool",t:"La forma curta",p:"Quan parlem, ho escurcem amb un apòstrof ('):",
    ex:[["I'm","I am"],["you're","you are"],["he's · she's · it's","he is · she is · it is"],["we're · they're","we are · they are"]],
@@ -393,7 +393,7 @@ window.REPAS=[
    tip:"<b>Where is</b> the cat? — It's <b>under</b> the bed."},
   {img:"house",t:"at home, at school",p:"Amb alguns llocs fem servir <b>at</b>:",
    ex:[["at home","a casa"],["at school","a l'escola"],["at the park","al parc"]],
-   tip:"<i>I'm at home</i> = Sóc a casa."}
+   tip:"<i>I'm at home</i> = Soc a casa."}
  ],
  ex:[
   {k:"match",p:[["in","dins"],["on","a sobre"],["under","a sota"],["behind","darrere"],["next to","al costat"]]},
@@ -401,7 +401,7 @@ window.REPAS=[
   {k:"pick",q:"My pencil is ___ the box.",a:"in",o:["on","under"],ca:"El meu llapis és dins la caixa."},
   {k:"pick",q:"The ball is ___ the chair.",a:"on",o:["in","between"],ca:"La pilota és sobre la cadira."},
   {k:"pick",q:"The school is ___ the park.",a:"next to",o:["next","between"],ca:"L'escola és al costat del parc.",w:"Al costat de = <b>next to</b>."},
-  {k:"pick",q:"I'm ___ home.",a:"at",o:["in","on"],ca:"Sóc a casa."},
+  {k:"pick",q:"I'm ___ home.",a:"at",o:["in","on"],ca:"Soc a casa."},
   {k:"pick",q:"The dog is ___ the tree.",a:"behind",o:["in front","under of"],ca:"El gos és darrere l'arbre."},
   {k:"type",q:"The bus stop is in ___ of the school. (davant)",a:["front"],ca:"La parada de l'autobús és davant l'escola."},
   {k:"type",q:"Sam is ___ Ana and Tom. (entre)",a:["between"],ca:"En Sam és entre l'Ana i el Tom."},

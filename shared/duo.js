@@ -11,6 +11,10 @@
      img   {q:"There are two dogs.", a:{i:"dog",n:2,l?}, o:[{i:"cat",n:2}], w?, say?:false si q és en català}
      match {p:[["I","am"],["she","is"]]}
      spell {en:"Wednesday", ca?:"dimecres", alt?:[...]}  dictat: s'escolta i s'escriu
+     order {s:"El gos corre pel parc.", x?:[paraules de més], hint?}  ordena les paraules (sense traducció)
+     text  {txt:"Text curt...", q:"Pregunta?", a:"resposta", o?:[altres opcions], hear?:true, ca?, alt?:[...]}
+           comprensió: hear=true s'escolta (el text es mostra després de respondre), si no es llegeix.
+           Amb o = tria; sense o = escriu (a o alt, sense majúscules ni puntuació).
    Exercicis generats (matemàtiques): {k:"type", gen:()=>({q, a, eq?, num?})}: es crida a cada lliçó.
      eq(v) = funció que diu si la resposta v és bona (per a números i fraccions); num = teclat numèric.
      t = enunciat propi en lloc del de per defecte.
@@ -138,7 +142,7 @@ function learn(u,k){
 }
 
 /* ---------- pràctica ---------- */
-const ASK={pick:'Tria la paraula que falta',type:'Escriu el que falta',build:'Tradueix la frase',listen:'Escolta i construeix la frase',img:'Tria la imatge correcta',match:'Uneix les parelles',spell:'Escolta i escriu'};
+const ASK={order:'Ordena la frase',text:'Llegeix i respon',hear:'Escolta i respon',pick:'Tria la paraula que falta',type:'Escriu el que falta',build:'Tradueix la frase',listen:'Escolta i construeix la frase',img:'Tria la imatge correcta',match:'Uneix les parelles',spell:'Escolta i escriu'};
 const FACES=['boy','girl','fox','owl','cool'];
 const norm=s=>String(s).toLowerCase().replace(/[’‘`´]/g,"'").replace(/[.,!?¿¡]/g,' ').replace(/\s+/g,' ').trim();
 const words=s=>String(s).replace(/[.,!?]/g,'').split(/\s+/).filter(Boolean);
@@ -158,11 +162,12 @@ function render(){
   const it=L.queue[L.pos];let q=it.q;
   if(q.k==='listen'&&!hasVoice&&!C.audio)q={...q,k:'build',ca:q.ca||q.en};
   if(q.k==='spell'&&!hasVoice&&!C.audio)q={...q,k:'type',q:'___ ('+(q.ca||'')+')',a:[q.en]};
+  const ak=q.k==='text'&&q.hear&&C.voice!==false?'hear':q.k;
   app.innerHTML=`<div class="d-wrap d-lesson">
     <div class="d-lbar"><a class="d-x" href="#" aria-label="Surt">✕</a><div class="bar"><span style="width:${L.done/L.total*100}%"></span></div>
       <span class="d-streak${L.streak>=2?' on':''}" title="Ratxa"><img src="${IMG('fire')}" alt="">${L.streak}</span></div>
     ${it.retry?'<p class="d-retry">Aquesta l\'has fallat abans. Torna-ho a provar!</p>':''}
-    <h2 class="d-ask">${q.t||(C.ask&&C.ask[q.k])||ASK[q.k]}</h2>
+    <h2 class="d-ask">${q.t||(C.ask&&C.ask[ak])||ASK[ak]}</h2>
     <div class="d-body pop" id="body"></div>
   </div>
   <div class="d-foot" id="foot"><div class="d-footin"><button type="button" class="btn d-check" id="check" disabled>Comprova</button></div></div>`;
@@ -200,10 +205,10 @@ const TYPES={
   pick(q,el,ready){
     el.innerHTML=`<div class="d-q glass"><p class="d-sentence">${blank(q.q)}</p>${q.ca?`<p class="d-cat">${q.ca}</p>`:''}</div>
       <div class="d-opts">${shuffle([q.a,...q.o]).map(o=>`<button type="button" class="d-opt" data-v="${attr(o)}">${o}</button>`).join('')}</div>`;
-    let v=null;choose(el,'.d-opt',b=>{v=b.dataset.v;el.querySelector('#blank').textContent=v;ready(true)});
+    let v=null;choose(el,'.d-opt',b=>{v=b.dataset.v;const bl=el.querySelector('#blank');if(bl)bl.textContent=v;ready(true)});
     return {check:()=>v===q.a,right:blank(q.q,q.a),say:q.q.replace(/_{2,}/,q.a),
       lock(ok){el.querySelectorAll('.d-opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.a)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});
-        el.querySelector('#blank').outerHTML=`<b class="d-fill ${ok?'':'bad'}">${ok?q.a:v}</b>`}};
+        const bl=el.querySelector('#blank');if(bl)bl.outerHTML=`<b class="d-fill ${ok?'':'bad'}">${ok?q.a:v}</b>`}};
   },
   type(q,el,ready){
     const [s,h]=hintSplit(q.q),ans=[].concat(q.a);
@@ -219,6 +224,26 @@ const TYPES={
     return {check(){if(!pen)return good(inp.value);const hit=pen.variants().find(good);if(hit!==undefined)inp.value=hit;return hit!==undefined},
       right:blank(s,ans[0]),say:s.replace(/_{2,}/,ans[0]),
       lock(ok){inp.disabled=true;inp.classList.add(ok?'right':'wrong');pen&&pen.lock()}};
+  },
+  order(q,el,ready){return tiles({...q,en:q.s},el,ready,q.hint?`<div class="d-q glass"><p class="d-cat">${q.hint}</p></div>`:'')},
+  text(q,el,ready){
+    const hear=q.hear&&C.voice!==false&&(hasVoice||C.audio);
+    const opts=q.o?shuffle([q.a,...q.o]):null,ans=[q.a,...(q.alt||[])];
+    el.innerHTML=(hear?`<div class="d-listen"><button type="button" class="d-big" data-say="${attr(q.txt)}" aria-label="Escolta">${SPK}</button><button type="button" class="d-big slow" data-say="${attr(q.txt)}" data-slow="1" aria-label="Escolta a poc a poc"><img src="${IMG('turtle')}" alt=""></button></div>`
+        :`<div class="d-text glass">${q.txt}</div>`)+
+      `<div class="d-q glass"><p class="d-sentence sm">${q.q}${hear?sayBtn(q.q,'sm'):''}</p>${q.ca?`<p class="d-cat">${q.ca}</p>`:''}</div>`+
+      (opts?`<div class="d-opts">${opts.map(o=>`<button type="button" class="d-opt" data-v="${attr(o)}">${o}</button>`).join('')}</div>`
+        :`<input class="d-input" id="inp" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Resposta" placeholder="Escriu aquí…">`);
+    let v=null,inp=el.querySelector('#inp');
+    if(opts)choose(el,'.d-opt',b=>{v=b.dataset.v;ready(true)});
+    else{inp.addEventListener('input',()=>{v=inp.value;ready(inp.value.trim()!=='')});
+      inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&inp.value.trim()){e.preventDefault();app.querySelector('#check').click()}})}
+    if(hear)setTimeout(()=>speak(q.txt),350);
+    return {check:()=>opts?v===q.a:ans.some(a=>norm(a)===norm(v||'')),right:q.a,say:null,
+      lock(ok){
+        if(opts)el.querySelectorAll('.d-opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.a)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});
+        else{inp.disabled=true;inp.classList.add(ok?'right':'wrong')}
+        if(hear){const t=document.createElement('div');t.className='d-text glass pop';t.innerHTML=q.txt;el.querySelector('.d-listen').after(t)}}};
   },
   build(q,el,ready){return tiles(q,el,ready,`<div class="d-speaker"><img src="${IMG(FACES[q.ca.length%FACES.length])}" alt=""><p class="d-bubble2">${q.ca}</p></div>`)},
   listen(q,el,ready){

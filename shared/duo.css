@@ -66,6 +66,9 @@ html[data-kid] .d-lbar .bar{flex:1;height:16px}
 .d-ask{margin:4px 0 0;font-size:clamp(1.3rem,5vw,1.6rem)!important}
 .d-body{display:flex;flex-direction:column;gap:16px}
 .d-q{padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.d-text{padding:16px 18px;font-size:1.12rem;line-height:1.6;font-weight:600;color:var(--ink);border-radius:20px}
+.d-text p{margin:0 0 .6em}.d-text p:last-child{margin:0}
+.d-sentence.sm{font-size:clamp(1.15rem,4.6vw,1.4rem)}
 .d-sentence{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(1.35rem,5.4vw,1.75rem);line-height:1.45}
 .d-hint{margin:0;color:var(--muted);font-weight:800}
 .d-cat{margin:0;color:var(--muted);font-weight:600;font-style:italic}
