@@ -14,7 +14,7 @@
    Exercicis generats (matemàtiques): {k:"type", gen:()=>({q, a, eq?, num?})}: es crida a cada lliçó.
      eq(v) = funció que diu si la resposta v és bona (per a números i fraccions); num = teclat numèric.
      t = enunciat propi en lloc del de per defecte.
-   Opcions de CURS: voice:false (sense veu en anglès), backLabel, intro, mascot, ask:{tipus:'enunciat'}.
+   Opcions de CURS: voice:false (sense veu en anglès), pen:"…/digits.json" (escriure amb el dit, cal shared/mates/digits.js i pen.js), backLabel, intro, mascot, ask:{tipus:'enunciat'}.
    min:6 a una unitat o un exercici = només per a 6è. Les estrelles es desen a localStorage[key] = {idUnitat: 1-3}. */
 (function(){
 const C=window.CURS, app=document.getElementById('duo');
@@ -212,9 +212,13 @@ const TYPES={
     const inp=el.querySelector('#inp');
     inp.addEventListener('input',()=>{el.querySelector('#blank').textContent=inp.value||' ';ready(inp.value.trim()!=='')});
     inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&inp.value.trim()){e.preventDefault();app.querySelector('#check').click()}});
-    setTimeout(()=>inp.focus({preventScroll:true}),50);
-    return {check:()=>q.eq?q.eq(inp.value):ans.some(a=>norm(a)===norm(inp.value)),right:blank(s,ans[0]),say:s.replace(/_{2,}/,ans[0]),
-      lock(ok){inp.disabled=true;inp.classList.add(ok?'right':'wrong')}};
+    /* matemàtiques: es pot escriure amb el dit (shared/mates/pen.js) */
+    const pen=C.pen&&q.eq&&window.PenInput?PenInput(el,inp,{model:C.pen,ready}):null;
+    if(!pen||!pen.on)setTimeout(()=>{if(!pen||!pen.on)inp.focus({preventScroll:true})},50);
+    const good=v=>q.eq?q.eq(v):ans.some(a=>norm(a)===norm(v));
+    return {check(){if(!pen)return good(inp.value);const hit=pen.variants().find(good);if(hit!==undefined)inp.value=hit;return hit!==undefined},
+      right:blank(s,ans[0]),say:s.replace(/_{2,}/,ans[0]),
+      lock(ok){inp.disabled=true;inp.classList.add(ok?'right':'wrong');pen&&pen.lock()}};
   },
   build(q,el,ready){return tiles(q,el,ready,`<div class="d-speaker"><img src="${IMG(FACES[q.ca.length%FACES.length])}" alt=""><p class="d-bubble2">${q.ca}</p></div>`)},
   listen(q,el,ready){
