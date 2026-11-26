@@ -18,10 +18,15 @@
   <h1>Qui estudia avui?</h1>
   <p class="muted" style="font-weight:700">Tria el teu nom per entrar al teu escriptori.</p>
   <div class="profiles">
-    <a class="glass profile" href="mario/"><span class="avatar" style="--cc:#5872c9" aria-hidden="true">M<img src="img/mario-avatar.png" alt="" onerror="this.remove()"></span><span class="tt">Mario</span><span class="grade">6è de primària</span></a>
-    <a class="glass profile" href="oliver/"><span class="avatar" style="--cc:#3a9585" aria-hidden="true">O<img src="img/oliver-avatar.png" alt="" onerror="this.remove()"></span><span class="tt">Oliver</span><span class="grade">4t de primària</span></a>
+    <a class="glass profile" href="mario/"><span class="avatar" style="--cc:#5872c9" aria-hidden="true">M<img data-av="mario" alt="" hidden></span><span class="tt">Mario</span><span class="grade">6è de primària</span></a>
+    <a class="glass profile" href="oliver/"><span class="avatar" style="--cc:#3a9585" aria-hidden="true">O<img data-av="oliver" alt="" hidden></span><span class="tt">Oliver</span><span class="grade">4t de primària</span></a>
   </div>
 </div>
-<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
+<script>
+/* avatar triat a l'escriptori de cada nen (localStorage cec-avatar-<nen>) */
+function avatars(){document.querySelectorAll('img[data-av]').forEach(i=>{let a=null;try{a=localStorage.getItem('cec-avatar-'+i.dataset.av)}catch(e){}
+  i.onerror=()=>{i.hidden=true};if(a){i.src='shared/avatars/'+a+'.webp';i.hidden=false}else i.hidden=true})}
+avatars();addEventListener('pageshow',avatars);
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
 </body>
 </html>

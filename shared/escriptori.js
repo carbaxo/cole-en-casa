@@ -12,8 +12,16 @@ const I={
  out:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4"/><path d="M10 17l-5-5 5-5M5 12h11"/></svg>',
  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>',
  sparkle:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.3L20 10l-5.8 1.7L12 18l-2.2-6.3L4 10l5.8-1.7z"/><circle cx="19" cy="19" r="2"/></svg>',
+ pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>',
  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'
 };
+/* avatars: imatges a shared/avatars/<id>.webp; l'elecció es guarda a localStorage cec-avatar-<nen> */
+const AV=[['tralalero','Tralalero Tralala'],['tungtung','Tung Tung Tung Sahur'],['ballerina','Ballerina Cappuccina'],['bombardiro','Bombardiro Crocodilo'],
+ ['lirili','Lirilì Larilà'],['patapim','Brr Brr Patapim'],['chimpanzini','Chimpanzini Bananini'],['assassino','Cappuccino Assassino'],
+ ['trippi','Trippi Troppi'],['gusini','Bombombini Gusini'],['frigo','Frigo Camelo'],['glorbo','Glorbo Fruttodrillo']];
+const AVK='cec-avatar-'+C.kid;
+const avGet=()=>{try{return localStorage.getItem(AVK)}catch(e){return null}};
+const avImg=()=>{const a=avGet();return a?`<img src="../shared/avatars/${a}.webp" alt="" onerror="this.remove()">`:''};
 const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return {}}};
 const topicStats=t=>{const b=read(t.key),v=Object.values(b);return {stars:v.reduce((a,x)=>a+x,0),max:t.levels*3,lv:v.filter(x=>x>0).length}};
 const all=C.subjects.flatMap(s=>s.topics.map(t=>({...t,subject:s})));
@@ -28,7 +36,7 @@ const icoSubj=s=>`<span class="icotile" style="--cc:${s.color}">${s.short}</span
 document.body.insertAdjacentHTML('afterbegin',`<div class="app" style="--cc:${C.color}">
   <aside class="side">
     <div class="who">
-      <div class="avatar" aria-hidden="true">${C.name[0]}<img src="../img/${C.kid}-avatar.png" alt="" onerror="this.remove()"></div>
+      <button type="button" class="avatar avbtn" id="avbtn" aria-label="Canvia el teu avatar">${C.name[0]}${avImg()}<span class="avedit" aria-hidden="true">${I.pen}</span></button>
       <div><div class="hi">Hola, ${C.name}!</div><div class="grade">${C.grade}</div></div>
     </div>
     <nav class="nav" aria-label="Assignatures">
@@ -84,6 +92,22 @@ function route(){
   document.title=(s?s.name+' · ':'')+'Escriptori '+(C.kid==='oliver'?"de l'":'del ')+C.name;
   window.scrollTo({top:0});
 }
+/* selector d'avatar */
+document.body.insertAdjacentHTML('beforeend',`<dialog class="avpick" id="avpick" aria-labelledby="avt">
+  <div class="avhead"><h2 id="avt">Tria el teu avatar</h2><button type="button" class="avclose" aria-label="Tanca">✕</button></div>
+  <div class="avgrid">${AV.map(([id,n])=>`<button type="button" class="avopt" data-id="${id}" aria-label="${n}"><img src="../shared/avatars/${id}.webp" alt="" loading="lazy"><span>${n}</span></button>`).join('')}
+  <button type="button" class="avopt avnone" data-id="" aria-label="Sense avatar, només la inicial"><span class="avinit" style="--cc:${C.color}">${C.name[0]}</span><span>La meva inicial</span></button></div>
+</dialog>`);
+const dlg=document.getElementById('avpick'),avbtn=document.getElementById('avbtn');
+const mark=()=>{const a=avGet()||'';dlg.querySelectorAll('.avopt').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===a))};
+avbtn.addEventListener('click',()=>{mark();dlg.showModal()});
+dlg.querySelector('.avclose').addEventListener('click',()=>dlg.close());
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+dlg.querySelectorAll('.avopt').forEach(b=>b.addEventListener('click',()=>{
+  try{b.dataset.id?localStorage.setItem(AVK,b.dataset.id):localStorage.removeItem(AVK)}catch(e){}
+  avbtn.querySelector('img')?.remove();avbtn.insertAdjacentHTML('beforeend',avImg());avbtn.append(avbtn.querySelector('.avedit'));
+  dlg.close();
+}));
 addEventListener('hashchange',route);route();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 })();

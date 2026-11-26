@@ -111,6 +111,31 @@ html[data-kid] .avatar{position:relative;width:120px;height:120px;border-radius:
   border:4px solid rgba(255,255,255,.35);box-shadow:0 10px 24px rgba(0,0,0,.3),inset 0 -6px 14px rgba(0,0,0,.2);
   font-family:var(--display);font-weight:900;font-size:3.2rem;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.25)}
 html[data-kid] .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* avatar que es pot canviar + selector */
+html[data-kid] .avbtn{padding:0;cursor:pointer;overflow:visible;font-family:var(--display);transition:transform .15s}
+html[data-kid] .avbtn:hover{transform:scale(1.04)} html[data-kid] .avbtn:active{transform:scale(.97)}
+html[data-kid] .avbtn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+html[data-kid] .avbtn img{border-radius:50%}
+html[data-kid] .avedit{position:absolute;right:-2px;bottom:-2px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(180deg,#fff,#dfe7ef);color:var(--navy);box-shadow:0 4px 10px rgba(0,0,0,.3);z-index:1}
+html[data-kid] .avedit svg{width:16px;height:16px}
+html[data-kid] .avpick{border:0;padding:0;border-radius:28px;width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 48px);
+  background:linear-gradient(180deg,#f6f9fc,#e6edf4);color:var(--ink);box-shadow:0 30px 80px rgba(20,32,52,.45);overflow:auto}
+html[data-kid] .avpick::backdrop{background:rgba(22,34,54,.55);backdrop-filter:blur(4px)}
+html[data-kid] .avpick[open]{animation:avin .22s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes avin{from{opacity:0;transform:translateY(16px) scale(.96)}}
+html[data-kid] .avhead{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 20px 10px;background:#f6f9fc;z-index:1}
+html[data-kid] .avhead h2{margin:0;font-family:var(--display);font-weight:900;font-size:1.4rem;color:var(--navy)}
+html[data-kid] .avclose{width:40px;height:40px;border-radius:50%;border:0;background:rgba(46,69,96,.1);color:var(--navy);font-size:1.1rem;font-weight:900;cursor:pointer}
+html[data-kid] .avgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:12px;padding:6px 20px 22px}
+html[data-kid] .avopt{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 6px 12px;border-radius:20px;border:3px solid transparent;
+  background:#fff;box-shadow:0 4px 12px rgba(35,55,85,.12);cursor:pointer;font:inherit;font-size:.78rem;font-weight:800;color:var(--muted);line-height:1.15;text-align:center;transition:transform .12s}
+html[data-kid] .avopt:hover{transform:translateY(-2px)}
+html[data-kid] .avopt img,html[data-kid] .avinit{width:84px;height:84px;border-radius:50%;object-fit:cover;background:#e6edf4}
+html[data-kid] .avinit{display:grid;place-items:center;background:var(--cc);color:#fff;font-family:var(--display);font-weight:900;font-size:2.2rem}
+html[data-kid] .avopt[aria-pressed="true"]{border-color:var(--teal);color:var(--navy);box-shadow:0 0 0 4px rgba(61,139,151,.2),0 6px 14px rgba(35,55,85,.15)}
+@media (max-width:860px){html[data-kid] .avedit{width:24px;height:24px;right:-4px;bottom:-4px} html[data-kid] .avedit svg{width:12px;height:12px}
+  html[data-kid] .avgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:6px 14px 18px} html[data-kid] .avopt img,html[data-kid] .avinit{width:72px;height:72px}}
 html[data-kid] .who .hi{font-family:var(--display);font-weight:900;font-size:1.5rem;color:#fff}
 html[data-kid] .who .grade{font-size:.9rem;color:rgba(238,243,248,.75);font-weight:700}
 html[data-kid] .nav{display:flex;flex-direction:column;gap:6px}
