@@ -155,7 +155,7 @@ async function load(){
   app.innerHTML='<p class="empty">Carregant…</p>';
   let users,progress;
   try{
-    [users,progress]=await Promise.all([api('/collections/users/records?perPage=50'),api('/collections/progress/records?perPage=50'),loadScript('../shared/angles/repas.js')]);
+    [users,progress]=await Promise.all([api('/collections/users/records?perPage=50'),api('/collections/progress/records?perPage=50'),loadScript('../shared/angles/repas.js'),loadScript('../shared/mates/gen.js').then(()=>Promise.all([loadScript('../shared/mates/mates4.js'),loadScript('../shared/mates/mates6.js')]))]);
   }catch(e){if(e.message!=='auth')app.innerHTML=`<p class="err">No es pot connectar amb el NUC (${esc(e.message)}).</p><button class="btn" onclick="location.reload()">Torna-ho a provar</button>`;return}
   const byUser={};progress.items.forEach(p=>byUser[p.user]=p);
   const cards=[];
@@ -191,9 +191,14 @@ function kidCard(kid,cfg,rec){
   const topics=cfg.subjects.flatMap(s=>s.topics.map(t=>({...t,subj:s.name})));
   let totS=0,totM=0;
   const topicRows=topics.map(t=>{
-    const b=val(t.key)||{},got=Object.values(b).reduce((a,x)=>a+x,0),max=t.levels*3;totS+=got;totM+=max;
+    const b=val(t.key)||{};
+    if(t.game){const rows=Object.entries(b).sort((x,y)=>y[1]-x[1]).map(([m,p])=>`<div class="unit"><b>${esc(m)}</b><span>${p} punts</span></div>`).join('');
+      return `<div class="row"><span class="t">${esc(t.subj)} · ${esc(t.title)}</span><span class="v">${rows?'Rècord '+Math.max(...Object.values(b))+' punts':'Sense partides'}</span></div>${rows?`<details><summary>Rècords per joc</summary><div class="units">${rows}</div></details>`:''}`}
+    const got=Object.values(b).reduce((a,x)=>a+x,0),max=t.levels*3;totS+=got;totM+=max;
     let units='';
-    if(t.key.startsWith('en-repas')&&window.REPAS)units=window.REPAS.filter(u=>!u.min||u.min<=grade).map(u=>`<div class="unit"><b>${esc(u.title)}</b>${stars(b[u.id]||0)}</div>`).join('');
+    const MAT=t.key.startsWith('mat-curs')?(grade>=6?window.MATES6:window.MATES4):null;
+    if(MAT)units=MAT.map(u=>`<div class="unit"><b>${esc(u.title)}</b>${stars(b[u.id]||0)}</div>`).join('');
+    else if(t.key.startsWith('en-repas')&&window.REPAS)units=window.REPAS.filter(u=>!u.min||u.min<=grade).map(u=>`<div class="unit"><b>${esc(u.title)}</b>${stars(b[u.id]||0)}</div>`).join('');
     else units=Array.from({length:t.levels},(_,i)=>`<div class="unit"><b>Nivell ${i+1}</b>${stars(b[i]||0)}</div>`).join('');
     return `<div class="row"><span class="t">${esc(t.subj)} · ${esc(t.title)}</span><span class="v">★ ${got} / ${max}</span><span class="track"><span style="width:${max?got/max*100:0}%"></span></span></div>
       <details><summary>Detall per unitat</summary><div class="units">${units}</div></details>`;

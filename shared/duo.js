@@ -10,6 +10,11 @@
      listen{en:"...", x:[...], ca?}
      img   {q:"There are two dogs.", a:{i:"dog",n:2,l?}, o:[{i:"cat",n:2}], w?, say?:false si q és en català}
      match {p:[["I","am"],["she","is"]]}
+     spell {en:"Wednesday", ca?:"dimecres", alt?:[...]}  dictat: s'escolta i s'escriu
+   Exercicis generats (matemàtiques): {k:"type", gen:()=>({q, a, eq?, num?})}: es crida a cada lliçó.
+     eq(v) = funció que diu si la resposta v és bona (per a números i fraccions); num = teclat numèric.
+     t = enunciat propi en lloc del de per defecte.
+   Opcions de CURS: voice:false (sense veu en anglès), backLabel, intro, mascot, ask:{tipus:'enunciat'}.
    min:6 a una unitat o un exercici = només per a 6è. Les estrelles es desen a localStorage[key] = {idUnitat: 1-3}. */
 (function(){
 const C=window.CURS, app=document.getElementById('duo');
@@ -34,9 +39,24 @@ let voice=null;
 function pickVoice(){try{const vs=speechSynthesis.getVoices();voice=vs.find(v=>/^en[-_]GB/i.test(v.lang))||vs.find(v=>/^en[-_]US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null}catch(e){}}
 const hasVoice='speechSynthesis' in window;
 try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
-const plain=t=>String(t).replace(/<[^>]+>/g,'').replace(/_{2,}/g,' ... ').replace(/→/g,', ').replace(/ \/ /g,', ').replace(/\(.*?\)/g,'');
-function speak(t,slow){if(!hasVoice)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(plain(t));u.lang=voice?voice.lang:'en-GB';if(voice)u.voice=voice;u.rate=slow?.55:.9;speechSynthesis.speak(u)}catch(e){}}
-const hush=()=>{try{speechSynthesis.cancel()}catch(e){}};
+const plain=t=>String(t).replace(/<[^>]+>/g,'').replace(/ · /g,', ').replace(/_{2,}/g,' ... ').replace(/→/g,', ').replace(/ \/ /g,', ').replace(/\(.*?\)/g,'');
+/* Àudios gravats (veu neuronal generada al NUC amb tools/tts-gen.py): <clau>.mp3 a C.audio.
+   La clau és un hash FNV-1a del text net; ha de coincidir amb tools/tts-texts.mjs.
+   Si una frase no té àudio, es fa servir la veu del dispositiu. */
+const sayKey=t=>{let h=0x811c9dc5;const s=plain(t).replace(/\s+/g,' ').trim();for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}return h.toString(16).padStart(8,'0')};
+let clips=null,player=null;
+if(C.audio)fetch(C.audio+'index.json').then(r=>r.ok?r.json():[]).then(a=>{clips=new Set(a)}).catch(()=>{});
+function speak(t,slow){
+  hush();if(C.voice===false)return;
+  const k=clips&&sayKey(t);
+  if(k&&clips.has(k)){
+    try{player=new Audio(C.audio+k+'.mp3');player.playbackRate=slow?.7:1;player.preservesPitch=true;
+      player.play().catch(()=>{clips.delete(k);tts(t,slow)});return}catch(e){}
+  }
+  tts(t,slow);
+}
+function tts(t,slow){if(!hasVoice)return;try{const u=new SpeechSynthesisUtterance(plain(t));u.lang=voice?voice.lang:'en-GB';if(voice)u.voice=voice;u.rate=slow?.55:.9;speechSynthesis.speak(u)}catch(e){}}
+const hush=()=>{try{if(player){player.pause();player=null}}catch(e){}try{speechSynthesis.cancel()}catch(e){}};
 let actx=null;
 function tone(seq,type='sine'){
   try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const t0=actx.currentTime;
@@ -47,7 +67,7 @@ function tone(seq,type='sine'){
 const SND={ok:()=>tone([[660,0,.14],[990,.1,.22]]),ko:()=>tone([[260,0,.2],[200,.14,.28]],'triangle'),
   win:()=>tone([[523,0,.14],[659,.13,.14],[784,.26,.14],[1047,.39,.4]]),tap:()=>tone([[520,0,.05]])};
 const SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>';
-const sayBtn=(t,cls='')=>hasVoice?`<button type="button" class="d-say ${cls}" data-say="${attr(t)}" aria-label="Escolta">${SPK}</button>`:'';
+const sayBtn=(t,cls='')=>C.voice!==false&&(hasVoice||C.audio)?`<button type="button" class="d-say ${cls}" data-say="${attr(t)}" aria-label="Escolta">${SPK}</button>`:'';
 app.addEventListener('click',e=>{const b=e.target.closest('[data-say]');if(b){e.stopPropagation();speak(b.dataset.say,b.dataset.slow)}});
 
 /* ---------- navegació (el botó enrere del mòbil torna al camí) ---------- */
@@ -67,11 +87,11 @@ const OFF=[0,1,1.5,1,0,-1,-1.5,-1];
 function path(){
   const tot=units.reduce((a,u)=>a+(best[u.id]||0),0),next=units.find(u=>!best[u.id]);
   const h=new Date().getHours(),hi=(h<14?'Bon dia':h<21?'Bona tarda':'Bona nit')+', '+C.name+'!';
-  const msg=next?(tot?`${hi} Seguim? Et toca <b>${next.title}</b>.`:`${hi} Repassem la base de l'anglès. Comença per la primera unitat.`):`${hi} Has acabat totes les unitats. Pots repetir-les per aconseguir totes les estrelles!`;
+  const msg=next?(tot?`${hi} Seguim? Et toca <b>${next.title}</b>.`:`${hi} ${C.intro||"Repassem la base de l'anglès."} Comença per la primera unitat.`):`${hi} Has acabat totes les unitats. Pots repetir-les per aconseguir totes les estrelles!`;
   document.title=C.title+' · '+C.name;
   app.innerHTML=`<div class="d-wrap">
-    <div class="d-top"><a class="backhub" href="${C.back}">← Anglès</a><span class="d-total"><img src="${IMG('star')}" alt="">${tot} / ${units.length*3}</span></div>
-    <header class="d-hero glass"><img class="d-mascot" src="${IMG('fox')}" alt=""><div class="d-herotxt"><span class="eyebrow">${C.eyebrow}</span><h1>${C.title}</h1><p class="d-bubble">${msg}</p></div></header>
+    <div class="d-top"><a class="backhub" href="${C.back}">${C.backLabel||'← Anglès'}</a><span class="d-total"><img src="${IMG('star')}" alt="">${tot} / ${units.length*3}</span></div>
+    <header class="d-hero glass"><img class="d-mascot" src="${IMG(C.mascot||'fox')}" alt=""><div class="d-herotxt"><span class="eyebrow">${C.eyebrow}</span><h1>${C.title}</h1><p class="d-bubble">${msg}</p></div></header>
     <ol class="d-path">${units.map((u,i)=>{const s=best[u.id]||0;return `<li class="d-node${u===next?' next':''}${s?' done':''}" style="--cc:var(${COL[i%5]});--x:${OFF[i%8]}">
       ${u===next?'<span class="d-start">Comença aquí!</span>':''}
       <button type="button" class="d-orb" data-u="${u.id}" aria-label="Unitat ${i+1}: ${attr(u.title)}"><img src="${IMG(u.img)}" alt=""></button>
@@ -118,7 +138,7 @@ function learn(u,k){
 }
 
 /* ---------- pràctica ---------- */
-const ASK={pick:'Tria la paraula que falta',type:'Escriu el que falta',build:'Tradueix la frase',listen:'Escolta i construeix la frase',img:'Tria la imatge correcta',match:'Uneix les parelles'};
+const ASK={pick:'Tria la paraula que falta',type:'Escriu el que falta',build:'Tradueix la frase',listen:'Escolta i construeix la frase',img:'Tria la imatge correcta',match:'Uneix les parelles',spell:'Escolta i escriu'};
 const FACES=['boy','girl','fox','owl','cool'];
 const norm=s=>String(s).toLowerCase().replace(/[’‘`´]/g,"'").replace(/[.,!?¿¡]/g,' ').replace(/\s+/g,' ').trim();
 const words=s=>String(s).replace(/[.,!?]/g,'').split(/\s+/).filter(Boolean);
@@ -130,18 +150,19 @@ function lesson(u){
   const ex=shuffle(u.ex);
   /* les parelles al principi, per escalfar */
   ex.sort((a,b)=>(b.k==='match')-(a.k==='match'));
-  L={u,queue:ex.map(q=>({q,retry:false})),pos:0,total:ex.length,done:0,first:0,streak:0,top:0};
+  L={u,queue:ex.map(q=>({q:q.gen?{...q,...q.gen()}:q,retry:false})),pos:0,total:ex.length,done:0,first:0,streak:0,top:0};
   render();
 }
 function render(){
   hush();
   const it=L.queue[L.pos];let q=it.q;
-  if(q.k==='listen'&&!hasVoice)q={...q,k:'build',ca:q.ca||q.en};
+  if(q.k==='listen'&&!hasVoice&&!C.audio)q={...q,k:'build',ca:q.ca||q.en};
+  if(q.k==='spell'&&!hasVoice&&!C.audio)q={...q,k:'type',q:'___ ('+(q.ca||'')+')',a:[q.en]};
   app.innerHTML=`<div class="d-wrap d-lesson">
     <div class="d-lbar"><a class="d-x" href="#" aria-label="Surt">✕</a><div class="bar"><span style="width:${L.done/L.total*100}%"></span></div>
       <span class="d-streak${L.streak>=2?' on':''}" title="Ratxa"><img src="${IMG('fire')}" alt="">${L.streak}</span></div>
     ${it.retry?'<p class="d-retry">Aquesta l\'has fallat abans. Torna-ho a provar!</p>':''}
-    <h2 class="d-ask">${ASK[q.k]}</h2>
+    <h2 class="d-ask">${q.t||(C.ask&&C.ask[q.k])||ASK[q.k]}</h2>
     <div class="d-body pop" id="body"></div>
   </div>
   <div class="d-foot" id="foot"><div class="d-footin"><button type="button" class="btn d-check" id="check" disabled>Comprova</button></div></div>`;
@@ -187,18 +208,29 @@ const TYPES={
   type(q,el,ready){
     const [s,h]=hintSplit(q.q),ans=[].concat(q.a);
     el.innerHTML=`<div class="d-q glass"><p class="d-sentence">${blank(s)}</p>${h?`<p class="d-hint">(${h})</p>`:''}${q.ca?`<p class="d-cat">${q.ca}</p>`:''}</div>
-      <input class="d-input" id="inp" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Resposta" placeholder="Escriu aquí…">`;
+      <input class="d-input" id="inp" type="text"${q.num?' inputmode="decimal"':''} autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Resposta" placeholder="Escriu aquí…">`;
     const inp=el.querySelector('#inp');
     inp.addEventListener('input',()=>{el.querySelector('#blank').textContent=inp.value||' ';ready(inp.value.trim()!=='')});
     inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&inp.value.trim()){e.preventDefault();app.querySelector('#check').click()}});
     setTimeout(()=>inp.focus({preventScroll:true}),50);
-    return {check:()=>ans.some(a=>norm(a)===norm(inp.value)),right:blank(s,ans[0]),say:s.replace(/_{2,}/,ans[0]),
+    return {check:()=>q.eq?q.eq(inp.value):ans.some(a=>norm(a)===norm(inp.value)),right:blank(s,ans[0]),say:s.replace(/_{2,}/,ans[0]),
       lock(ok){inp.disabled=true;inp.classList.add(ok?'right':'wrong')}};
   },
   build(q,el,ready){return tiles(q,el,ready,`<div class="d-speaker"><img src="${IMG(FACES[q.ca.length%FACES.length])}" alt=""><p class="d-bubble2">${q.ca}</p></div>`)},
   listen(q,el,ready){
     const T=tiles(q,el,ready,`<div class="d-listen"><button type="button" class="d-big" data-say="${attr(q.en)}" aria-label="Escolta">${SPK}</button><button type="button" class="d-big slow" data-say="${attr(q.en)}" data-slow="1" aria-label="Escolta a poc a poc"><img src="${IMG('turtle')}" alt=""></button></div>`);
     setTimeout(()=>speak(q.en),350);return T;
+  },
+  spell(q,el,ready){
+    el.innerHTML=`<div class="d-listen"><button type="button" class="d-big" data-say="${attr(q.en)}" aria-label="Escolta">${SPK}</button><button type="button" class="d-big slow" data-say="${attr(q.en)}" data-slow="1" aria-label="Escolta a poc a poc"><img src="${IMG('turtle')}" alt=""></button></div>
+      ${q.ca?`<p class="d-cat" style="text-align:center">${q.ca}</p>`:''}
+      <input class="d-input" id="inp" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Escriu el que sents" placeholder="Escriu el que sents…">`;
+    const inp=el.querySelector('#inp');
+    inp.addEventListener('input',()=>ready(inp.value.trim()!==''));
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&inp.value.trim()){e.preventDefault();app.querySelector('#check').click()}});
+    setTimeout(()=>{speak(q.en);inp.focus({preventScroll:true})},350);
+    return {check:()=>[q.en,...(q.alt||[])].some(a=>norm(a)===norm(inp.value)),right:q.en,say:q.en,
+      lock(ok){inp.disabled=true;inp.classList.add(ok?'right':'wrong')}};
   },
   img(q,el,ready){
     const key=o=>o.i+'|'+(o.n||1)+'|'+(o.l||'');

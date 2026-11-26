@@ -23,7 +23,8 @@ const AVK='cec-avatar-'+C.kid;
 const avGet=()=>{try{return localStorage.getItem(AVK)}catch(e){return null}};
 const avImg=()=>{const a=avGet();return a?`<img src="../shared/avatars/${a}.webp" alt="" onerror="this.remove()">`:''};
 const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return {}}};
-const topicStats=t=>{const b=read(t.key),v=Object.values(b);return {stars:v.reduce((a,x)=>a+x,0),max:t.levels*3,lv:v.filter(x=>x>0).length}};
+/* un tema "game" (joc amb rècords de punts) no compta estrelles */
+const topicStats=t=>{const b=read(t.key),v=Object.values(b);if(t.game)return {stars:0,max:0,lv:0,rec:Math.max(0,...v)};return {stars:v.reduce((a,x)=>a+x,0),max:t.levels*3,lv:v.filter(x=>x>0).length}};
 const all=C.subjects.flatMap(s=>s.topics.map(t=>({...t,subject:s})));
 
 /* ratxa de dies seguits */
@@ -51,7 +52,7 @@ const main=document.getElementById('main');
 
 function topicCard(t){
   const st=topicStats(t),s=t.subject;
-  return `<a class="glass topic" href="${t.href}" style="--cc:${s.color}">${icoSubj(s)}<span class="meta"><span class="tt">${t.title}</span><span class="sub">${t.sub} · ★ ${st.stars} de ${st.max}</span><span class="bar" aria-hidden="true"><span style="width:${st.stars/st.max*100}%"></span></span></span><span class="play">${I.play}</span></a>`;
+  return `<a class="glass topic" href="${t.href}" style="--cc:${s.color}">${icoSubj(s)}<span class="meta"><span class="tt">${t.title}</span><span class="sub">${t.sub} · ${t.game?(st.rec?'Rècord: '+st.rec+' punts':'Encara sense rècord'):'★ '+st.stars+' de '+st.max}</span>${t.game?'':`<span class="bar" aria-hidden="true"><span style="width:${st.max?st.stars/st.max*100:0}%"></span></span>`}</span><span class="play">${I.play}</span></a>`;
 }
 function home(){
   let stars=0,max=0,lv=0,maxLv=0;all.forEach(t=>{const s=topicStats(t);stars+=s.stars;max+=s.max;lv+=s.lv;maxLv+=t.levels});
