@@ -11,10 +11,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Cole en casa">
 <link rel="stylesheet" href="shared/glass.css">
+<style>
+.hometop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.adminbtn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;text-decoration:none;font-weight:800;font-size:.8rem;
+  color:var(--muted,#4d6079);background:rgba(255,255,255,.45);border:1px solid rgba(35,55,85,.14);-webkit-tap-highlight-color:transparent}
+.adminbtn:hover{background:rgba(255,255,255,.75);color:var(--ink,#1c2b41)}
+@media (max-width:300px){.adminbtn span{display:none}.adminbtn{padding:8px}}
+</style>
 </head>
 <body>
 <div class="home-wrap">
-  <span class="eyebrow" id="fam" style="-webkit-user-select:none;user-select:none;-webkit-touch-callout:none">Cole en casa</span>
+  <div class="hometop">
+    <span class="eyebrow" id="fam" style="-webkit-user-select:none;user-select:none;-webkit-touch-callout:none">Cole en casa</span>
+    <a class="adminbtn" href="familia/" aria-label="Administrador: evolució del Mario i l'Oliver"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>Administrador</span></a>
+  </div>
   <h1>Qui estudia avui?</h1>
   <p class="muted" style="font-weight:700">Tria el teu nom per entrar al teu escriptori.</p>
   <div class="profiles">
