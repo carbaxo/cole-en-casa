@@ -250,6 +250,7 @@ function tiles(q,el,ready,top){
 function end(){
   const u=L.u,r=L.first/L.total,s=r>=.9?3:r>=.7?2:1,prev=best[u.id]||0;
   if(s>prev){best[u.id]=s;save()}
+  if(window.cecLog)cecLog(`${C.title}|${u.title}|${s}|${L.first}/${L.total}`);
   const msg=s===3?`Ets un crack, ${C.name}! Unitat perfecta.`:s===2?'Molt bé! Una mica més i tindràs les 3 estrelles.':'Unitat acabada! Mira les targetes i torna-ho a provar per guanyar més estrelles.';
   const i=units.indexOf(u),nx=units[i+1];
   app.innerHTML=`<div class="d-wrap d-end pop">

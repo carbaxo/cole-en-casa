@@ -673,6 +673,7 @@ function answer(st,o,box){
 function endLevel(){
   const L=LEVELS[cur.i],n=L.qs.length,s=starsFor(cur.ok,n);
   if(s>(best[cur.i]||0)){best[cur.i]=s;save()}
+  if(window.cecLog)cecLog('Pronoms febles|'+L.t+'|'+s+'|'+cur.ok+'/'+n);
   const msg=s===3?'Ets un crack dels pronoms, Mario!':s===2?'Molt bé, Mario! Una mica més i tindràs les 3 estrelles.':s===1?'Vas bé! Repassa els trucs i torna-ho a provar.':'No passa res! Mira les targetes i els trucs, i torna-ho a intentar.';
   const w=document.getElementById('quiz-wrap');
   w.innerHTML=`<div class="quiz end pop" style="--cc:var(${LCOL[cur.i]})"><h2>Nivell ${cur.i+1} acabat</h2><div class="stars">${starHTML(s)}</div><p style="font-size:1.3rem;font-family:var(--display)">${cur.ok} de ${n} correctes</p><p>${msg}</p>

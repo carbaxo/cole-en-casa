@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#eef2f7">
+<title>Tauler de família</title>
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<!-- Tauler privat per als pares: progrés i temps d'ús dels nens (dades del PocketBase del NUC).
+     No hi ha cap enllaç visible: s'hi entra mantenint premut «Cole en casa» a la portada. -->
+<style>
+:root{--bg:#eef2f7;--card:#fff;--ink:#17233a;--ink2:#4a5a74;--muted:#7a879c;--line:rgba(23,35,58,.1);--grid:rgba(23,35,58,.08);
+  --accent:#3f6fe0;--good:#1f8a5b;--bad:#c8372d;--star:#e6a700;--shadow:0 1px 2px rgba(23,35,58,.06),0 8px 24px rgba(23,35,58,.07);
+  font-family:"Nunito","Segoe UI",system-ui,-apple-system,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1622;--card:#182233;--ink:#e8eef7;--ink2:#b3c0d3;--muted:#8392a8;--line:rgba(255,255,255,.09);--grid:rgba(255,255,255,.07);
+  --accent:#7aa2ff;--good:#4cc38a;--bad:#ff7a6e;--star:#f5c443;--shadow:0 1px 2px rgba(0,0,0,.3);color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-left)) 48px}
+h1{font-size:1.6rem;margin:0;font-weight:900;letter-spacing:-.01em}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.top .sub{color:var(--muted);font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-weight:800;font-size:.85rem;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 12px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.kids{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px}
+.kid{display:flex;flex-direction:column;gap:18px}
+.head{display:flex;align-items:center;gap:14px}
+.av{width:60px;height:60px;border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;background:var(--kc);color:#fff;font-weight:900;font-size:1.6rem}
+.av img{width:100%;height:100%;object-fit:cover}
+.head h2{margin:0;font-size:1.35rem;font-weight:900}
+.head .meta{color:var(--muted);font-weight:700;font-size:.85rem}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.tile{border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.tile .l{color:var(--muted);font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.tile .n{font-size:1.5rem;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.2}
+.tile .s{color:var(--ink2);font-size:.78rem;font-weight:700}
+@media (max-width:520px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+h3{margin:0 0 8px;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:900}
+/* gràfic de barres: minuts per dia */
+.chart{position:relative;height:150px;display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:4px;align-items:end;
+  border-bottom:1px solid var(--grid);padding-top:18px;background:linear-gradient(var(--grid) 1px,transparent 1px) 0 18px/100% 33.3%}
+.bar{position:relative;height:100%;display:flex;align-items:flex-end;justify-content:center;cursor:default;outline:none}
+.bar i{display:block;width:min(70%,22px);background:var(--kc);border-radius:4px 4px 0 0;min-height:0}
+.bar.zero i{height:2px!important;background:var(--grid);border-radius:1px}
+.bar .tip{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--card);font-size:.75rem;font-weight:800;white-space:nowrap;padding:4px 8px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .12s;z-index:2}
+.bar:hover .tip,.bar:focus .tip{opacity:1}
+.bar.today i{outline:2px solid var(--card);outline-offset:-1px}
+.xlab{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:4px;color:var(--muted);font-size:.68rem;font-weight:700;text-align:center;margin-top:4px}
+.ymax{position:absolute;top:0;left:0;color:var(--muted);font-size:.68rem;font-weight:700}
+.rows{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}
+.row .t{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .v{font-weight:800;color:var(--ink2);font-variant-numeric:tabular-nums;font-size:.9rem}
+.track{grid-column:1/-1;height:6px;border-radius:3px;background:var(--grid);overflow:hidden}
+.track span{display:block;height:100%;background:var(--kc);border-radius:3px}
+details{border-top:1px solid var(--line);padding-top:8px}
+summary{cursor:pointer;font-weight:800;color:var(--accent);font-size:.85rem}
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:8px}
+.unit{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;border:1px solid var(--line);border-radius:10px;padding:6px 8px}
+.unit b{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st{color:var(--star);letter-spacing:1px;white-space:nowrap}.st .off{color:var(--grid)}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.log li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:.85rem}
+.log li:first-child{border-top:0}
+.log .when{color:var(--muted);font-weight:700;font-size:.75rem;min-width:84px}
+.log .what{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.log .what small{color:var(--muted);font-weight:700}
+.empty{color:var(--muted);font-weight:700;font-size:.85rem}
+/* entrada */
+.login{max-width:360px;margin:12vh auto 0;display:flex;flex-direction:column;gap:12px}
+.login input{font:inherit;font-size:1.05rem;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.err{color:var(--bad);font-weight:800;min-height:1.3em;margin:0;font-size:.9rem}
+.note{color:var(--muted);font-size:.8rem;font-weight:700;margin:16px 0 0}
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);padding:20px;width:min(380px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(10,16,28,.5)}
+dialog form{display:flex;flex-direction:column;gap:10px}
+dialog input{font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<dialog id="pwd"><form method="dialog" id="pwdf">
+  <h3 style="margin:0">Canvia la contrasenya</h3>
+  <input id="p0" type="password" placeholder="Contrasenya actual" autocomplete="current-password" required>
+  <input id="p1" type="password" placeholder="Nova (mínim 10 caràcters)" autocomplete="new-password" minlength="10" required>
+  <p class="err" id="perr"></p>
+  <div class="btns"><button class="btn primary" type="submit">Desa</button><button class="btn" type="button" id="pcancel">Cancel·la</button></div>
+</form></dialog>
+<script>
+(function(){
+let API='https://rcv-nuc.tail66e645.ts.net:10000/api';
+try{API=localStorage.getItem('cec-api')||API}catch(e){}
+const EMAIL='familia@cole-en-casa.local',TK='cec-parent';
+const app=document.getElementById('app');
+const KIDS={mario:{name:'Mario',color:'#5872c9'},oliver:{name:'Oliver',color:'#3a9585'}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tok=()=>{try{return JSON.parse(localStorage.getItem(TK)||'null')}catch(e){return null}};
+
+async function api(path,opt={}){
+  const t=tok(),r=await fetch(API+path,{...opt,headers:{'content-type':'application/json',...(t?{Authorization:t.token}:{}),...(opt.headers||{})}});
+  if(r.status===401||r.status===403){localStorage.removeItem(TK);login('La sessió ha caducat. Torna a entrar.');throw new Error('auth')}
+  if(!r.ok){let m='Error '+r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error(m)}
+  return r.status===204?null:r.json();
+}
+
+/* ---------- entrada ---------- */
+function login(msg){
+  app.innerHTML=`<form class="card login" id="lf">
+    <h1>Tauler de família</h1>
+    <p class="empty" style="margin:0">Progrés i temps d'ús del Mario i l'Oliver.</p>
+    <input type="email" value="${EMAIL}" autocomplete="username" hidden>
+    <input id="pw" type="password" placeholder="Contrasenya" autocomplete="current-password" required>
+    <p class="err" id="err">${msg?esc(msg):''}</p>
+    <button class="btn primary" type="submit">Entra</button>
+  </form>`;
+  const f=document.getElementById('lf');document.getElementById('pw').focus();
+  f.addEventListener('submit',async e=>{
+    e.preventDefault();const err=document.getElementById('err');err.textContent='';
+    try{
+      const r=await fetch(API+'/collections/parents/auth-with-password',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({identity:EMAIL,password:document.getElementById('pw').value})});
+      const d=await r.json();
+      if(!r.ok){err.textContent=r.status===429?'Massa intents. Espera un minut.':'Contrasenya incorrecta.';return}
+      localStorage.setItem(TK,JSON.stringify({token:d.token,id:d.record.id}));load();
+    }catch(x){err.textContent='No es pot connectar amb el NUC. Està encès?'}
+  });
+}
+
+/* ---------- configuració dels temes (es llegeix de l'escriptori de cada nen) ---------- */
+async function kidConfig(kid){
+  try{const h=await (await fetch('../'+kid+'/index.html',{cache:'no-cache'})).text();
+    const m=h.match(/window\.ESCRIPTORI=(\{[\s\S]*?\n\});/);return JSON.parse(m[1])}catch(e){return {grade:'',subjects:[]}}
+}
+function loadScript(src){return new Promise(r=>{const s=document.createElement('script');s.src=src;s.onload=s.onerror=r;document.head.appendChild(s)})}
+
+/* ---------- utilitats de dates ---------- */
+const dayKey=d=>d.toLocaleDateString('sv');
+const lastDays=n=>{const a=[],d=new Date();for(let i=n-1;i>=0;i--){const x=new Date(d);x.setDate(d.getDate()-i);a.push(x)}return a};
+const mins=s=>Math.round(s/60);
+const fmtMin=s=>{const m=mins(s);return m<60?m+' min':Math.floor(m/60)+' h '+(m%60?String(m%60).padStart(2,'0')+' min':'')};
+function ago(iso){
+  if(!iso)return 'mai';
+  const d=new Date(iso),s=(Date.now()-d)/1000;
+  if(s<90)return 'ara mateix';if(s<3600)return 'fa '+Math.round(s/60)+' min';
+  if(s<86400)return 'fa '+Math.round(s/3600)+' h';
+  return d.toLocaleDateString('ca',{day:'numeric',month:'short'})+' a les '+d.toLocaleTimeString('ca',{hour:'2-digit',minute:'2-digit'});
+}
+const stars=n=>`<span class="st" aria-label="${n} de 3 estrelles">${[0,1,2].map(i=>i<n?'★':'<span class="off">★</span>').join('')}</span>`;
+
+/* ---------- tauler ---------- */
+async function load(){
+  if(!tok())return login();
+  app.innerHTML='<p class="empty">Carregant…</p>';
+  let users,progress;
+  try{
+    [users,progress]=await Promise.all([api('/collections/users/records?perPage=50'),api('/collections/progress/records?perPage=50'),loadScript('../shared/angles/repas.js')]);
+  }catch(e){if(e.message!=='auth')app.innerHTML=`<p class="err">No es pot connectar amb el NUC (${esc(e.message)}).</p><button class="btn" onclick="location.reload()">Torna-ho a provar</button>`;return}
+  const byUser={};progress.items.forEach(p=>byUser[p.user]=p);
+  const cards=[];
+  for(const kid of Object.keys(KIDS)){
+    const u=users.items.find(x=>x.name===kid),rec=u&&byUser[u.id];
+    cards.push(kidCard(kid,await kidConfig(kid),rec));
+  }
+  app.innerHTML=`<div class="top"><div><h1>Tauler de família</h1><div class="sub">Actualitzat ${new Date().toLocaleTimeString('ca',{hour:'2-digit',minute:'2-digit'})}</div></div>
+    <div class="btns"><button class="btn" id="rf">Actualitza</button><button class="btn" id="cp">Contrasenya</button><button class="btn" id="out">Surt</button></div></div>
+    <div class="kids">${cards.join('')}</div>
+    <p class="note">El temps compta només mentre l'app és oberta i en ús (si no toquen res durant un minut i mig, es para). Les dades arriben quan el dispositiu té connexió.</p>`;
+  document.getElementById('rf').onclick=load;
+  document.getElementById('out').onclick=()=>{localStorage.removeItem(TK);login()};
+  document.getElementById('cp').onclick=()=>{document.getElementById('perr').textContent='';document.getElementById('pwdf').reset();document.getElementById('pwd').showModal()};
+}
+
+function kidCard(kid,cfg,rec){
+  const K=KIDS[kid],data=(rec&&rec.data)||{};
+  const val=k=>{const e=data[k];if(!e||e.v==null)return null;try{return JSON.parse(e.v)}catch(x){return e.v}};
+  const avatar=val('cec-avatar-'+kid);
+  const time=val('cec-time-'+kid)||{},log=(val('cec-log-'+kid)||[]).slice().reverse(),days=val('cec-days-'+kid)||[];
+  const grade=parseInt(cfg.grade)||6;
+
+  /* temps per dia i per secció */
+  const perDay={},perArea={},week=new Set(lastDays(7).map(dayKey));
+  for(const k in time){const [d,,area]=k.split('|');perDay[d]=(perDay[d]||0)+time[k];if(week.has(d))perArea[area||'']=(perArea[area||'']||0)+time[k]}
+  const today=perDay[dayKey(new Date())]||0,w7=[...week].reduce((a,d)=>a+(perDay[d]||0),0);
+
+  /* ratxa */
+  let streak=0;{const d=new Date();while(days.includes(d.toISOString().slice(0,10))){streak++;d.setDate(d.getDate()-1)}}
+
+  /* temes */
+  const topics=cfg.subjects.flatMap(s=>s.topics.map(t=>({...t,subj:s.name})));
+  let totS=0,totM=0;
+  const topicRows=topics.map(t=>{
+    const b=val(t.key)||{},got=Object.values(b).reduce((a,x)=>a+x,0),max=t.levels*3;totS+=got;totM+=max;
+    let units='';
+    if(t.key.startsWith('en-repas')&&window.REPAS)units=window.REPAS.filter(u=>!u.min||u.min<=grade).map(u=>`<div class="unit"><b>${esc(u.title)}</b>${stars(b[u.id]||0)}</div>`).join('');
+    else units=Array.from({length:t.levels},(_,i)=>`<div class="unit"><b>Nivell ${i+1}</b>${stars(b[i]||0)}</div>`).join('');
+    return `<div class="row"><span class="t">${esc(t.subj)} · ${esc(t.title)}</span><span class="v">★ ${got} / ${max}</span><span class="track"><span style="width:${max?got/max*100:0}%"></span></span></div>
+      <details><summary>Detall per unitat</summary><div class="units">${units}</div></details>`;
+  }).join('');
+
+  /* nom de cada secció a partir de l'enllaç del tema */
+  const areaName=a=>{if(!a)return 'Escriptori';const t=topics.find(t=>t.href.replace(/\/$/,'')===a);return t?t.subj+' · '+t.title:a};
+  const areaRows=Object.entries(perArea).sort((a,b)=>b[1]-a[1]).map(([a,s])=>`<div class="row"><span class="t">${esc(areaName(a))}</span><span class="v">${fmtMin(s)}</span><span class="track"><span style="width:${w7?s/w7*100:0}%"></span></span></div>`).join('');
+
+  /* gràfic 14 dies */
+  const d14=lastDays(14),vals=d14.map(d=>perDay[dayKey(d)]||0),maxV=Math.max(...vals,60*15);
+  const top=Math.ceil(mins(maxV)/15)*15;
+  const bars=d14.map((d,i)=>{const s=vals[i],lab=d.toLocaleDateString('ca',{weekday:'long',day:'numeric',month:'short'});
+    return `<div class="bar${s?'':' zero'}${i===13?' today':''}" tabindex="0" aria-label="${esc(lab)}: ${fmtMin(s)}"><i style="height:${s?Math.max(3,mins(s)/top*100):0}%"></i><span class="tip">${esc(lab)} · ${fmtMin(s)}</span></div>`}).join('');
+  const xl=d14.map((d,i)=>`<span>${i%2===1||i===13?d.toLocaleDateString('ca',{weekday:'narrow'})+d.getDate():''}</span>`).join('');
+
+  const lastIso=log.length?log[0].split('|')[0]:(rec&&rec.updated?rec.updated.replace(' ','T'):null);
+  const logRows=log.slice(0,15).map(e=>{const [ts,topic,unit,st,ok]=e.split('|');
+    return `<li><span class="when">${esc(ago(ts))}</span><span class="what">${esc(unit)} <small>· ${esc(topic)}</small></span><span>${stars(+st||0)} <small class="empty">${esc(ok||'')}</small></span></li>`}).join('');
+
+  return `<section class="card kid" style="--kc:${K.color}">
+    <div class="head"><div class="av">${avatar?`<img src="../shared/avatars/${esc(avatar)}.webp" alt="">`:K.name[0]}</div>
+      <div><h2>${K.name}</h2><div class="meta">${esc(cfg.grade||'')} · Última activitat: ${esc(ago(lastIso))}</div></div></div>
+    ${rec?'':'<p class="empty">Encara no ha sincronitzat cap dispositiu. Ho farà la primera vegada que entri a la web amb la contrasenya.</p>'}
+    <div class="tiles">
+      <div class="tile"><div class="l">Avui</div><div class="n">${mins(today)}</div><div class="s">minuts</div></div>
+      <div class="tile"><div class="l">7 dies</div><div class="n">${mins(w7)}</div><div class="s">minuts</div></div>
+      <div class="tile"><div class="l">Ratxa</div><div class="n">${streak}</div><div class="s">${streak===1?'dia':'dies'} seguits</div></div>
+      <div class="tile"><div class="l">Estrelles</div><div class="n">${totS}</div><div class="s">de ${totM}</div></div>
+    </div>
+    <div><h3>Minuts per dia · últimes 2 setmanes</h3>
+      <div class="chart" role="img" aria-label="Minuts d'ús per dia, últims 14 dies"><span class="ymax">${top} min</span>${bars}</div><div class="xlab">${xl}</div></div>
+    <div><h3>On ha passat el temps · últims 7 dies</h3><div class="rows">${areaRows||'<p class="empty">Sense temps registrat.</p>'}</div></div>
+    <div><h3>Progrés per tema</h3><div class="rows">${topicRows||'<p class="empty">Cap tema.</p>'}</div></div>
+    <div><h3>Últimes lliçons</h3>${logRows?`<ul class="log">${logRows}</ul>`:'<p class="empty">Encara no hi ha lliçons registrades.</p>'}</div>
+  </section>`;
+}
+
+/* ---------- canvi de contrasenya ---------- */
+const dlg=document.getElementById('pwd');
+document.getElementById('pcancel').onclick=()=>dlg.close();
+document.getElementById('pwdf').addEventListener('submit',async e=>{
+  e.preventDefault();const perr=document.getElementById('perr'),p1=document.getElementById('p1').value;
+  try{
+    await api('/collections/parents/records/'+tok().id,{method:'PATCH',body:JSON.stringify({oldPassword:document.getElementById('p0').value,password:p1,passwordConfirm:p1})});
+    dlg.close();localStorage.removeItem(TK);login('Contrasenya canviada. Entra amb la nova.');
+  }catch(x){if(x.message!=='auth')perr.textContent='No s\'ha pogut canviar: revisa la contrasenya actual.'}
+});
+
+load();
+})();
+</script>
+</body>
+</html>

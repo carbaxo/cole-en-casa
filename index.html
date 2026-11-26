@@ -14,7 +14,7 @@
 </head>
 <body>
 <div class="home-wrap">
-  <span class="eyebrow">Cole en casa</span>
+  <span class="eyebrow" id="fam" style="-webkit-user-select:none;user-select:none;-webkit-touch-callout:none">Cole en casa</span>
   <h1>Qui estudia avui?</h1>
   <p class="muted" style="font-weight:700">Tria el teu nom per entrar al teu escriptori.</p>
   <div class="profiles">
@@ -27,6 +27,11 @@
 function avatars(){document.querySelectorAll('img[data-av]').forEach(i=>{let a=null;try{a=localStorage.getItem('cec-avatar-'+i.dataset.av)}catch(e){}
   i.onerror=()=>{i.hidden=true};if(a){i.src='shared/avatars/'+a+'.webp';i.hidden=false}else i.hidden=true})}
 avatars();addEventListener('pageshow',avatars);
+/* entrada amagada al tauler de família: mantén premut «Cole en casa» 2 segons */
+(function(){const el=document.getElementById('fam');let t=null;const stop=()=>clearTimeout(t);
+  el.addEventListener('pointerdown',()=>{stop();t=setTimeout(()=>{location.href='familia/'},2000)});
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>el.addEventListener(ev,stop));
+  el.addEventListener('contextmenu',e=>e.preventDefault())})();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));</script>
 </body>
 </html>

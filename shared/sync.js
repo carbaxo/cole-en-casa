@@ -8,6 +8,10 @@
      - les d'EXTRA (temes antics que no porten el nom del nen a la clau)
    Temes nous: feu servir claus acabades en "-<nen>".
 
+   Ús (per al tauler de família, familia/):
+     - cec-time-<nen> = {"AAAA-MM-DD|dispositiu|secció": segons actius}
+     - cec-log-<nen>  = ["hora ISO|tema|unitat|estrelles|encerts", …] (cecLog)
+
    Com es combinen dos dispositius:
      - objectes de números ({unitat: estrelles}) → el màxim de cada camp
      - llistes (dies de la ratxa) → la unió
@@ -40,7 +44,7 @@ function merge(a,b){ /* a i b: {v: text o null, t: hora} */
   if(a.v==null||b.v==null)return a.t>=b.t?a:b;
   const x=parse(a.v),y=parse(b.v),t=Math.max(a.t,b.t);
   if(numObj(x)&&numObj(y)){const o={...x};for(const k in y)o[k]=Math.max(o[k]||0,y[k]);return {v:JSON.stringify(o),t}}
-  if(Array.isArray(x)&&Array.isArray(y)){return {v:JSON.stringify([...new Set([...x,...y])].sort().slice(-400)),t}}
+  if(Array.isArray(x)&&Array.isArray(y)){return {v:JSON.stringify([...new Set([...x,...y])].sort().slice(-300)),t}}
   return a.t>=b.t?a:b;
 }
 
@@ -73,8 +77,8 @@ async function sync(){
     saveMeta();
     if(push){
       const body=JSON.stringify({user:auth().uid,data:out});
-      if(rec)await call('/collections/progress/records/'+rec.id,{method:'PATCH',body});
-      else await call('/collections/progress/records',{method:'POST',body});
+      if(rec)await call('/collections/progress/records/'+rec.id,{method:'PATCH',body,keepalive:body.length<60000});
+      else await call('/collections/progress/records',{method:'POST',body,keepalive:body.length<60000});
     }
     if(changed)dispatchEvent(new CustomEvent('cec-sync'));
   }catch(e){}
@@ -97,7 +101,29 @@ async function start(){
   try{const d=await call('/collections/users/auth-refresh',{method:'POST'});rawSet.call(ls,TK,JSON.stringify({token:d.token,uid:d.record.id}))}catch(e){}
   sync();
 }
+/* ---------- temps d'ús: compta mentre la pàgina és visible i hi ha hagut activitat l'últim minut i mig ---------- */
+let dev=null;try{dev=ls.getItem('cec-dev');if(!dev){dev=Math.random().toString(36).slice(2,8);rawSet.call(ls,'cec-dev',dev)}}catch(e){dev='x'}
+const area=(()=>{const p=location.pathname.split('/'+kid+'/')[1]||'';return p.replace(/(index\.html)?$/,'').replace(/\/$/,'')})();
+let acc=0,lastAct=Date.now();
+['pointerdown','keydown','scroll','touchstart'].forEach(ev=>addEventListener(ev,()=>{lastAct=Date.now()},{passive:true}));
+setInterval(()=>{if(document.visibilityState==='visible'&&Date.now()-lastAct<90e3)acc+=5},5000);
+function flush(){
+  if(acc<=0)return;
+  const k='cec-time-'+kid,o=jget(k)||{},id=new Date().toLocaleDateString('sv')+'|'+dev+'|'+area;
+  o[id]=(o[id]||0)+acc;acc=0;
+  try{ls.setItem(k,JSON.stringify(o))}catch(e){}
+}
+setInterval(flush,60000);
+/* registre de lliçons acabades */
+window.cecLog=function(text){
+  const k='cec-log-'+kid,a=jget(k)||[];a.push(new Date().toISOString()+'|'+text);
+  try{ls.setItem(k,JSON.stringify(a.slice(-300)))}catch(e){}
+};
 addEventListener('online',sync);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')sync()});
+addEventListener('pagehide',()=>{flush();clearTimeout(timer);sync()});
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'){lastAct=Date.now();sync()}
+  else{flush();clearTimeout(timer);sync()}
+});
 start();
 })();
