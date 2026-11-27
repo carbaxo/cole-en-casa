@@ -35,7 +35,12 @@ U.push({id:"lhello",title:"Hello!",sub:"nom · edat · d'on ets",img:"wave",
   {k:"text",hear:true,txt:T3,q:"What is Emma's favourite colour?",ca:"Quin és el color preferit de l'Emma?",a:"green"},
   {k:"text",hear:true,txt:T3,q:"What does Emma love?",ca:"Què li encanta a l'Emma?",a:"Football",o:["Basketball","Music"]},
   {k:"listen",en:"I am from London.",x:["is","in"],ca:"Soc de Londres."},
-  {k:"spell",en:"name",ca:"nom"}
+  {k:"spell",en:"name",ca:"nom"},
+  {"k":"say","en":"My name is Lucy.","ca":"Em dic Lucy."},
+  {"k":"say","en":"Nice to meet you!","ca":"Encantat de conèixer-te!"},
+  {"k":"say","hear":true,"txt":T1,"q":"How old is Lucy?","ca":"Quants anys té la Lucy? Digues-ho en anglès.","a":["nine"],"m":"She is nine."},
+  {"k":"say","q":"What's your name?","ca":"Com et dius? Respon amb una frase: My name is…","a":["my name is","i am"],"m":"My name is …"},
+  {"k":"say","q":"How old are you?","ca":"Quants anys tens? Respon: I am … years old.","a":["years old","i am"],"m":"I am … years old."}
  ]});
 }
 
@@ -66,7 +71,12 @@ U.push({id:"lfamily",title:"My family",sub:"la família",img:"people",
   {k:"text",hear:true,txt:T3,q:"Who has got long blonde hair?",ca:"Qui té els cabells llargs i rossos?",a:"Mia",o:["Jack"]},
   {k:"text",hear:true,txt:T3,q:"Jack is short. True or false?",ca:"El Jack és baix. Cert o fals?",a:"False",o:["True"]},
   {k:"text",hear:true,txt:T3,q:"How old is Mia?",ca:"Quants anys té la Mia?",a:"eight",alt:["8"]},
-  {k:"spell",en:"cousin",ca:"cosí"}
+  {k:"spell",en:"cousin",ca:"cosí"},
+  {"k":"say","en":"I have got one sister.","ca":"Tinc una germana."},
+  {"k":"say","en":"This is my family.","ca":"Aquesta és la meva família."},
+  {"k":"say","hear":true,"txt":T1,"q":"What is the cat's name?","ca":"Com es diu el gat?","a":["tiger"],"m":"The cat's name is Tiger."},
+  {"k":"say","hear":true,"txt":T2,"q":"When does Tom visit his grandparents?","ca":"Quan visita el Tom els seus avis?","a":["sunday"],"m":"Every Sunday."},
+  {"k":"say","q":"Have you got a brother or a sister?","ca":"Tens germans? Respon: I have got… / I haven't got…","a":["i have","have got","yes","no"],"m":"I have got a brother."}
  ]});
 }
 
@@ -97,7 +107,12 @@ U.push({id:"lhouse",title:"My house",sub:"la casa i l'habitació",img:"house",
   {k:"text",hear:true,txt:T3,q:"Where does the dog sleep?",ca:"On dorm el gos?",a:"In the kitchen",o:["In the garden","In Sam's bedroom"]},
   {k:"text",hear:true,txt:T3,q:"What is in the garden?",ca:"Què hi ha al jardí?",a:"A tree and a pond",o:["A tree and a dog","A pond and a car"]},
   {k:"listen",en:"The cat is under the table.",x:["on","chair"],ca:"El gat és sota la taula."},
-  {k:"spell",en:"window",ca:"finestra"}
+  {k:"spell",en:"window",ca:"finestra"},
+  {"k":"say","en":"My bed is next to the window.","ca":"El meu llit és al costat de la finestra."},
+  {"k":"say","en":"There is a big balcony.","ca":"Hi ha un balcó gran."},
+  {"k":"say","hear":true,"txt":T2,"q":"Where is the football?","ca":"On és la pilota?","a":["under the bed","under"],"m":"It is under the bed."},
+  {"k":"say","hear":true,"txt":T3,"q":"What colour is the door?","ca":"De quin color és la porta?","a":["red"],"m":"It is red."},
+  {"k":"say","q":"Do you live in a flat or in a house?","ca":"Vius en un pis o en una casa? Respon: I live in a…","a":["flat","house","apartment"],"m":"I live in a flat."}
  ]});
 }
 
@@ -128,7 +143,12 @@ U.push({id:"lschool",title:"At school",sub:"assignatures i horari",img:"school",
   {k:"text",hear:true,txt:T3,q:"How many children are there?",ca:"Quants nens hi ha?",a:"Twenty-four",o:["Fourteen","Twenty"]},
   {k:"text",hear:true,txt:T3,q:"What is the friend's name?",ca:"Com es diu l'amic?",a:"Jack"},
   {k:"text",hear:true,txt:T3,q:"What colour is the pencil case?",ca:"De quin color és l'estoig?",a:"Blue",o:["Red","Green"]},
-  {k:"spell",en:"Tuesday",ca:"dimarts"}
+  {k:"spell",en:"Tuesday",ca:"dimarts"},
+  {"k":"say","en":"My favourite subject is Art.","ca":"La meva assignatura preferida és Plàstica."},
+  {"k":"say","en":"I sit next to my friend.","ca":"M'assec al costat del meu amic."},
+  {"k":"say","hear":true,"txt":T1,"q":"Who is Emma's teacher?","ca":"Qui és el mestre de l'Emma?","a":["brown"],"m":"Mr Brown."},
+  {"k":"say","hear":true,"txt":T2,"q":"What do they play in PE?","ca":"A què juguen a Educació Física?","a":["basketball"],"m":"They play basketball."},
+  {"k":"say","q":"What is your favourite subject?","ca":"Quina és la teva assignatura preferida? Respon: My favourite subject is…","a":["my favourite","maths","math","english","art","science","music","pe","p e","physical","catalan","spanish","history","geography","computer"],"m":"My favourite subject is …"}
  ]});
 }
 
@@ -159,7 +179,12 @@ U.push({id:"lanimals",title:"Animals",sub:"mascotes i zoo",img:"giraffe",
   {k:"text",hear:true,txt:T3,q:"What do penguins eat?",ca:"Què mengen els pingüins?",a:"Fish",o:["Carrots","Birds"]},
   {k:"text",hear:true,txt:T3,q:"What colour are baby penguins?",ca:"De quin color són els pingüins petits?",a:"Grey",o:["Black","White"]},
   {k:"listen",en:"The elephant is big and grey.",x:["are","small"],ca:"L'elefant és gran i gris."},
-  {k:"spell",en:"penguin",ca:"pingüí"}
+  {k:"spell",en:"penguin",ca:"pingüí"},
+  {"k":"say","en":"She has got long ears.","ca":"Té les orelles llargues."},
+  {"k":"say","en":"Penguins can't fly.","ca":"Els pingüins no poden volar."},
+  {"k":"say","hear":true,"txt":T1,"q":"What does Snowy eat?","ca":"Què menja la Snowy?","a":["carrot"],"m":"She eats carrots."},
+  {"k":"say","hear":true,"txt":T3,"q":"What do penguins eat?","ca":"Què mengen els pingüins?","a":["fish"],"m":"They eat fish."},
+  {"k":"say","q":"What is your favourite animal?","ca":"Quin és el teu animal preferit? Respon: My favourite animal is…","a":["my favourite","i like","i love","dog","cat","rabbit","horse","lion","tiger","elephant","giraffe","penguin","monkey","dolphin","snake","fish","bird","bear","panda","fox","wolf","shark","whale","hamster","turtle","tortoise","parrot","zebra","owl","duck","pig","cow","sheep","chicken","mouse","hippo","kangaroo","koala","crocodile","frog","butterfly"],"m":"My favourite animal is …"}
  ]});
 }
 
@@ -190,7 +215,12 @@ U.push({id:"lday",title:"My day",sub:"rutines i hores",img:"alarm",
   {k:"text",hear:true,txt:T3,q:"What time does Lucy get up on Saturdays?",ca:"A quina hora es lleva la Lucy els dissabtes?",a:"At ten o'clock",o:["At seven o'clock","At nine o'clock"]},
   {k:"text",hear:true,txt:T3,q:"What does Lucy do in the morning?",ca:"Què fa la Lucy al matí?",a:"She goes swimming",o:["She watches TV","She reads a book"]},
   {k:"text",hear:true,txt:T3,q:"Lucy does homework on Saturdays. True or false?",ca:"La Lucy fa deures els dissabtes. Cert o fals?",a:"False",o:["True"]},
-  {k:"spell",en:"morning",ca:"matí"}
+  {k:"spell",en:"morning",ca:"matí"},
+  {"k":"say","en":"I get up at seven o'clock.","ca":"Em llevo a les set."},
+  {"k":"say","en":"I go to bed at half past nine.","ca":"Me'n vaig a dormir a dos quarts de deu."},
+  {"k":"say","hear":true,"txt":T1,"q":"How does Mia go to school?","ca":"Com va la Mia a l'escola?","a":["bus"],"m":"By bus."},
+  {"k":"say","hear":true,"txt":T2,"q":"Where does Jack play football?","ca":"On juga a futbol el Jack?","a":["park"],"m":"In the park."},
+  {"k":"say","q":"What time do you get up?","ca":"A quina hora et lleves? Respon: I get up at…","a":["get up","oclock","half past","quarter","six","seven","eight","nine"],"m":"I get up at seven o'clock."}
  ]});
 }
 
@@ -221,7 +251,12 @@ U.push({id:"lshop",title:"Food and shopping",sub:"menjar i preus",img:"pizza",
   {k:"text",hear:true,txt:T3,q:"What does Tom have for dessert?",ca:"Què pren el Tom de postres?",a:"a banana",alt:["banana","bananas"]},
   {k:"text",hear:true,txt:T3,q:"Tom likes fish. True or false?",ca:"Al Tom li agrada el peix. Cert o fals?",a:"False",o:["True"]},
   {k:"listen",en:"How much is the bread?",x:["many","are"],ca:"Quant costa el pa?"},
-  {k:"spell",en:"apple",ca:"poma"}
+  {k:"spell",en:"apple",ca:"poma"},
+  {"k":"say","en":"Can I have an ice cream, please?","ca":"Em pots donar un gelat, si us plau?"},
+  {"k":"say","en":"How much is it?","ca":"Quant costa?"},
+  {"k":"say","hear":true,"txt":T1,"q":"What does Sam want?","ca":"Què vol el Sam?","a":["chocolate"],"m":"He wants some chocolate."},
+  {"k":"say","hear":true,"txt":T2,"q":"How much is an ice cream?","ca":"Quant costa un gelat?","a":["one pound","a pound"],"m":"It costs one pound."},
+  {"k":"say","q":"What do you like for breakfast?","ca":"Què t'agrada esmorzar? Respon: I like…","a":["i like","i have","i eat","i drink","milk","bread","toast","cereal","fruit","juice","biscuit","cake","egg","yoghurt","yogurt","croissant","chocolate","banana","apple","sandwich","cookie"],"m":"I like milk and toast."}
  ]});
 }
 
@@ -252,7 +287,12 @@ U.push({id:"lweather",title:"Weather and clothes",sub:"el temps i la roba",img:"
   {k:"text",hear:true,txt:T3,q:"What does Emma make?",ca:"Què fa l'Emma?",a:"A snowman",o:["A cake","A scarf"]},
   {k:"text",hear:true,txt:T3,q:"Who does Emma make it with?",ca:"Amb qui el fa l'Emma?",a:"Her dad",o:["Her mum","Her brother"]},
   {k:"text",hear:true,txt:T3,q:"What is the snowman's nose?",ca:"Què és el nas del ninot de neu?",a:"A carrot",o:["A banana","A glove"]},
-  {k:"spell",en:"jumper",ca:"jersei"}
+  {k:"spell",en:"jumper",ca:"jersei"},
+  {"k":"say","en":"It is cold and windy.","ca":"Fa fred i vent."},
+  {"k":"say","en":"She is wearing a yellow raincoat.","ca":"Porta un impermeable groc."},
+  {"k":"say","hear":true,"txt":T1,"q":"What colour are Mia's boots?","ca":"De quin color són les botes de la Mia?","a":["blue"],"m":"They are blue."},
+  {"k":"say","hear":true,"txt":T3,"q":"What does Emma make with her dad?","ca":"Què fa l'Emma amb el seu pare?","a":["snowman","snow man"],"m":"A snowman."},
+  {"k":"say","q":"What's the weather like today?","ca":"Quin temps fa avui? Respon: It's…","a":["sunny","sun","rain","cloud","windy","wind","cold","hot","snow","warm","fog","cool","nice"],"m":"It is sunny."}
  ]});
 }
 
@@ -285,7 +325,12 @@ U.push({id:"lweekend",title:"Last weekend",sub:"el passat",img:"kite",min:6,
   {k:"text",hear:true,txt:T3,q:"What was the book about?",ca:"De què anava el llibre?",a:"space",alt:["about space"]},
   {k:"text",hear:true,txt:T3,q:"Who was the cake for?",ca:"Per a qui era el pastís?",a:"Grandma",o:["Dad","The brother"]},
   {k:"listen",en:"We watched a film last night.",x:["watch","yesterday"],ca:"Ahir a la nit vam mirar una pel·lícula."},
-  {k:"spell",en:"weekend",ca:"cap de setmana"}
+  {k:"spell",en:"weekend",ca:"cap de setmana"},
+  {"k":"say","en":"Last Saturday I went to the cinema.","ca":"Dissabte passat vaig anar al cinema."},
+  {"k":"say","en":"The water was too cold.","ca":"L'aigua estava massa freda."},
+  {"k":"say","hear":true,"txt":T1,"q":"What did they eat after the film?","ca":"Què van menjar després de la pel·lícula?","a":["pizza"],"m":"They had a pizza."},
+  {"k":"say","hear":true,"txt":T2,"q":"What animals did Emma see?","ca":"Quins animals va veure l'Emma?","a":["bird","fox"],"m":"Birds and a fox."},
+  {"k":"say","q":"What did you do last weekend?","ca":"Què vas fer el cap de setmana passat? Respon amb el passat: I went… / I played…","a":["i went","i played","i watched","i visited","i read","i stayed","i had","i made","i saw","i did","i was","i helped","i ate","i swam","i rode","we went","we played","we had","we visited"],"m":"Last weekend I played football with my friends."}
  ]});
 }
 
@@ -318,7 +363,12 @@ U.push({id:"lholiday",title:"Holiday plans",sub:"going to · will",img:"beach",m
   {k:"text",hear:true,txt:T3,q:"Where will they have lunch?",ca:"On dinaran?",a:"At a fish restaurant",o:["At the beach","In the town square"]},
   {k:"text",hear:true,txt:T3,q:"What will they maybe eat in the evening?",ca:"Què potser menjaran al vespre?",a:"ice cream",alt:["an ice cream","icecream","ice creams"]},
   {k:"listen",en:"We are going to visit our cousins.",x:["go","will"],ca:"Anirem a veure els nostres cosins."},
-  {k:"spell",en:"holiday",ca:"vacances"}
+  {k:"spell",en:"holiday",ca:"vacances"},
+  {"k":"say","en":"I am going to travel to Scotland.","ca":"Viatjaré a Escòcia."},
+  {"k":"say","en":"I think it will be sunny.","ca":"Crec que farà sol."},
+  {"k":"say","hear":true,"txt":T1,"q":"How long are they going to stay?","ca":"Quant de temps s'hi estaran?","a":["two weeks","fortnight"],"m":"For two weeks."},
+  {"k":"say","hear":true,"txt":T2,"q":"Why isn't Mia taking her tablet?","ca":"Per què la Mia no s'emporta la tauleta?","a":["read","book"],"m":"Because she wants to read books."},
+  {"k":"say","q":"What are you going to do this summer?","ca":"Què faràs aquest estiu? Respon: I'm going to…","a":["going to","i will","i want","gonna"],"m":"I am going to go to the beach."}
  ]});
 }
 
@@ -352,7 +402,12 @@ U.push({id:"ltown",title:"Directions in town",sub:"on és?",img:"point",min:6,
   {k:"text",hear:true,txt:T3,q:"Where is the museum?",ca:"On és el museu?",a:"Between the cinema and the hospital",o:["Next to the police station","Opposite the station"]},
   {k:"text",hear:true,txt:T3,q:"The swimming pool is near the river. True or false?",ca:"La piscina és a prop del riu. Cert o fals?",a:"True",o:["False"]},
   {k:"listen",en:"Take the first street on the right.",x:["left","second"],ca:"Agafa el primer carrer a la dreta."},
-  {k:"spell",en:"station",ca:"estació"}
+  {k:"spell",en:"station",ca:"estació"},
+  {"k":"say","en":"Go straight on and turn left.","ca":"Ves recte i gira a l'esquerra."},
+  {"k":"say","en":"The library is next to the post office.","ca":"La biblioteca és al costat de correus."},
+  {"k":"say","hear":true,"txt":T1,"q":"Where is the library?","ca":"On és la biblioteca?","a":["post office","park"],"m":"It is next to the post office."},
+  {"k":"say","hear":true,"txt":T3,"q":"What is opposite the station?","ca":"Què hi ha davant de l'estació?","a":["supermarket"],"m":"A big supermarket."},
+  {"k":"say","q":"How do you get to school?","ca":"Com vas a l'escola? Respon: I walk… / I go by…","a":["walk","on foot","car","bus","bike","bicycle","train","metro","underground","scooter","skate"],"m":"I walk to school."}
  ]});
 }
 
@@ -383,7 +438,12 @@ U.push({id:"lphone",title:"Phone calls and messages",sub:"trucades i missatges",
   {k:"text",hear:true,txt:T3,q:"When is the lesson this week?",ca:"Quan és la classe aquesta setmana?",a:"On Thursday",o:["On Tuesday","On Wednesday"]},
   {k:"text",hear:true,txt:T3,q:"What time is the lesson?",ca:"A quina hora és la classe?",a:"At half past five",o:["At five o'clock","At half past six"]},
   {k:"listen",en:"Can I speak to Lucy, please?",x:["talk","Is"],ca:"Puc parlar amb la Lucy, si us plau?"},
-  {k:"spell",en:"tomorrow",ca:"demà"}
+  {k:"spell",en:"tomorrow",ca:"demà"},
+  {"k":"say","en":"Can I speak to Lucy, please?","ca":"Puc parlar amb la Lucy, si us plau?"},
+  {"k":"say","en":"Call me back, OK?","ca":"Torna'm a trucar, d'acord?"},
+  {"k":"say","hear":true,"txt":T1,"q":"Whose birthday is it?","ca":"De qui és l'aniversari?","a":["jack"],"m":"It is Jack's birthday."},
+  {"k":"say","hear":true,"txt":T2,"q":"What is Sam's mum making?","ca":"Què està fent la mare del Sam?","a":["pasta"],"m":"She is making pasta."},
+  {"k":"say","q":"Leave a message: invite a friend to your party!","ca":"Deixa un missatge de veu: convida un amic a la teva festa.","a":["party","birthday","come"],"m":"Hi, it's me! Can you come to my party on Saturday?"}
  ]});
 }
 

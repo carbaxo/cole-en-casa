@@ -15,6 +15,9 @@
      text  {txt:"Text curt...", q:"Pregunta?", a:"resposta", o?:[altres opcions], hear?:true, ca?, alt?:[...]}
            comprensió: hear=true s'escolta (el text es mostra després de respondre), si no es llegeix.
            Amb o = tria; sense o = escriu (a o alt, sense majúscules ni puntuació).
+     say   parlar en veu alta (micròfon, SpeechRecognition en anglès; si no n'hi ha o no té permís, s'escriu):
+           {en:"My name is Lucy.", ca?}  escolta i repeteix (val si diu el 75% de les paraules)
+           {q:"How old is Lucy?", a:["nine"], m:"She is nine.", txt?, hear?, ca?}  respon: val si diu alguna de les a
    Exercicis generats (matemàtiques): {k:"type", gen:()=>({q, a, eq?, num?})}: es crida a cada lliçó.
      eq(v) = funció que diu si la resposta v és bona (per a números i fraccions); num = teclat numèric.
      t = enunciat propi en lloc del de per defecte.
@@ -142,7 +145,7 @@ function learn(u,k){
 }
 
 /* ---------- pràctica ---------- */
-const ASK={order:'Ordena la frase',text:'Llegeix i respon',hear:'Escolta i respon',pick:'Tria la paraula que falta',type:'Escriu el que falta',build:'Tradueix la frase',listen:'Escolta i construeix la frase',img:'Tria la imatge correcta',match:'Uneix les parelles',spell:'Escolta i escriu'};
+const ASK={say:'Escolta i repeteix',sayq:'Respon en veu alta',order:'Ordena la frase',text:'Llegeix i respon',hear:'Escolta i respon',pick:'Tria la paraula que falta',type:'Escriu el que falta',build:'Tradueix la frase',listen:'Escolta i construeix la frase',img:'Tria la imatge correcta',match:'Uneix les parelles',spell:'Escolta i escriu'};
 const FACES=['boy','girl','fox','owl','cool'];
 const norm=s=>String(s).toLowerCase().replace(/[’‘`´]/g,"'").replace(/[.,!?¿¡]/g,' ').replace(/\s+/g,' ').trim();
 const words=s=>String(s).replace(/[.,!?]/g,'').split(/\s+/).filter(Boolean);
@@ -158,11 +161,11 @@ function lesson(u){
   render();
 }
 function render(){
-  hush();
+  hush();micStop();
   const it=L.queue[L.pos];let q=it.q;
   if(q.k==='listen'&&!hasVoice&&!C.audio)q={...q,k:'build',ca:q.ca||q.en};
   if(q.k==='spell'&&!hasVoice&&!C.audio)q={...q,k:'type',q:'___ ('+(q.ca||'')+')',a:[q.en]};
-  const ak=q.k==='text'&&q.hear&&C.voice!==false?'hear':q.k;
+  const ak=q.k==='text'&&q.hear&&C.voice!==false?'hear':q.k==='say'&&!q.en?'sayq':q.k;
   app.innerHTML=`<div class="d-wrap d-lesson">
     <div class="d-lbar"><a class="d-x" href="#" aria-label="Surt">✕</a><div class="bar"><span style="width:${L.done/L.total*100}%"></span></div>
       <span class="d-streak${L.streak>=2?' on':''}" title="Ratxa"><img src="${IMG('fire')}" alt="">${L.streak}</span></div>
@@ -198,6 +201,41 @@ function feedback(q,T,forced){
   const cont=foot.querySelector('#cont');cont.focus({preventScroll:true});
   cont.addEventListener('click',()=>{L.pos++;if(L.pos>=L.queue.length)end();else{render();window.scrollTo({top:0})}});
 }
+
+/* ---------- parlar (reconeixement de veu del navegador; a Android i iPhone cal internet) ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const MIC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v4"/></svg>';
+let mic=null;
+function micStart(done){
+  let alts=[],fin=false;
+  try{mic=new SR()}catch(e){mic=null;return done({err:'not-allowed'})}
+  const r=mic;r.lang='en-GB';r.interimResults=false;r.maxAlternatives=5;r.continuous=false;
+  r.onresult=e=>{const res=e.results[e.results.length-1];alts=[];for(let i=0;i<res.length;i++)alts.push(res[i].transcript)};
+  r.onerror=e=>{if(fin)return;fin=true;if(mic===r)mic=null;done({err:e.error||'error'})};
+  r.onend=()=>{if(fin)return;fin=true;if(mic===r)mic=null;done(alts.length?{alts}:{err:'no-speech'})};
+  try{r.start()}catch(e){fin=true;mic=null;return done({err:'error'})}
+  /* si el micròfon no respon mai (permís bloquejat sense avís), no ens quedem penjats */
+  setTimeout(()=>{if(fin)return;fin=true;if(mic===r)mic=null;try{r.abort()}catch(e){}done(alts.length?{alts}:{err:'no-speech'})},15000);
+}
+function micStop(){if(mic){const r=mic;mic=null;try{r.abort()}catch(e){}}}
+/* compara el que s'ha dit amb la resposta: minúscules, sense puntuació, xifres en lletres, contraccions desfetes */
+const N1='zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen'.split(' '),
+  N10='twenty thirty forty fifty sixty seventy eighty ninety'.split(' ');
+const numW=n=>n<20?N1[n]:n<100?N10[Math.floor(n/10)-2]+(n%10?' '+N1[n%10]:''):String(n);
+const CONTR={"i'm":'i am',"you're":'you are',"we're":'we are',"they're":'they are',"it's":'it is',"he's":'he is',"she's":'she is',"that's":'that is',"what's":'what is',"where's":'where is',"there's":'there is',
+  "i've":'i have',"we've":'we have',"they've":'they have',"i'll":'i will',"we'll":'we will',"it'll":'it will',"i'd":'i would',"let's":'let us',
+  "don't":'do not',"doesn't":'does not',"didn't":'did not',"isn't":'is not',"aren't":'are not',"wasn't":'was not',"weren't":'were not',"can't":'cannot',"won't":'will not',"haven't":'have not',"hasn't":'has not',"couldn't":'could not'};
+for(const k of ["can't","don't","doesn't","didn't","isn't","aren't","wasn't","haven't","hasn't","couldn't","i'm","i've","you're","they're","that's","what's"])CONTR[k.replace("'",'')]=CONTR[k];
+const sayNorm=s=>' '+String(s).toLowerCase().replace(/[’‘`´]/g,"'").replace(/£\s?(\d+)/g,'$1 pounds ').replace(/(\d+):(\d+)/g,'$1 $2').replace(/(\d+)/g,(m,d)=>' '+numW(+d)+' ')
+  .replace(/[^a-z' ]+/g,' ').split(/\s+/).filter(Boolean).map(w=>CONTR[w]||w.replace(/'s$/,'')).join(' ').replace(/'/g,'').replace(/\bcan not\b/g,'cannot').replace(/\bo clock\b/g,'oclock')+' ';
+/* repetir: quina part de les paraules de la frase s'ha dit */
+function sayScore(said,target){
+  const h=sayNorm(said).trim().split(' '),t=sayNorm(target).trim().split(' ');let n=0;
+  for(const w of t){const i=h.indexOf(w);if(i>=0){n++;h.splice(i,1)}}
+  return t.length?n/t.length:0;
+}
+/* respondre: la frase a apareix (al començament d'una paraula, per acceptar plurals) */
+const sayHas=(said,a)=>sayNorm(said).includes(' '+sayNorm(a).trim());
 
 /* tipus d'exercici: cadascun pinta el cos i torna {check, right, say, lock} */
 function choose(box,sel,on){box.querySelectorAll(sel).forEach(b=>b.addEventListener('click',()=>{SND.tap();box.querySelectorAll(sel).forEach(x=>x.classList.toggle('sel',x===b));on(b)}))}
@@ -244,6 +282,53 @@ const TYPES={
         if(opts)el.querySelectorAll('.d-opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.a)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});
         else{inp.disabled=true;inp.classList.add(ok?'right':'wrong')}
         if(hear){const t=document.createElement('div');t.className='d-text glass pop';t.innerHTML=q.txt;el.querySelector('.d-listen').after(t)}}};
+  },
+  say(q,el,ready){
+    const rep=!!q.en,voiceOk=C.voice!==false&&(hasVoice||C.audio),txt=rep?q.en:q.txt,hear=voiceOk&&(rep||q.hear);
+    const model=rep?q.en:(q.m||[].concat(q.a)[0]);
+    el.innerHTML=(txt&&hear?`<div class="d-listen"><button type="button" class="d-big" data-say="${attr(txt)}" aria-label="Escolta">${SPK}</button><button type="button" class="d-big slow" data-say="${attr(txt)}" data-slow="1" aria-label="Escolta a poc a poc"><img src="${IMG('turtle')}" alt=""></button></div>`
+        :txt?`<div class="d-text glass">${txt}</div>`:'')+
+      (rep?(q.ca?`<p class="d-cat" style="text-align:center">${q.ca}</p>`:'')
+        :`<div class="d-q glass"><p class="d-sentence sm">${q.q}${hear||!txt?sayBtn(q.q,'sm'):''}</p>${q.ca?`<p class="d-cat">${q.ca}</p>`:''}</div>`)+
+      `<div class="d-mic"><button type="button" class="d-micbtn" aria-label="Prem i parla">${MIC}</button><p class="d-heard">Prem el micròfon i parla en anglès</p>
+        <button type="button" class="d-mickb">⌨️ Prefereixo escriure</button></div>
+       <input class="d-input" id="inp" type="text" hidden autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Resposta" placeholder="${rep?'Escriu el que sents…':'Respon en anglès…'}">
+       <button type="button" class="d-mickb d-micback" hidden>🎤 Parlar</button>`;
+    const box=el.querySelector('.d-mic'),btn=box.querySelector('.d-micbtn'),heard=box.querySelector('.d-heard'),inp=el.querySelector('#inp'),back=el.querySelector('.d-micback');
+    let said=[],locked=false,tries=0;
+    const good=alts=>alts.some(t=>rep?sayScore(t,q.en)>=.75:[].concat(q.a).some(a=>sayHas(t,a)));
+    function keyboard(p,why,keep){
+      micStop();btn.classList.remove('on');box.hidden=p;inp.hidden=!p;back.hidden=!p||!SR;
+      if(!keep)try{localStorage.setItem('cec-mic',p?'0':'1')}catch(e){}
+      if(p){if(why)inp.placeholder=why;ready(inp.value.trim()!=='');setTimeout(()=>{if(!locked)inp.focus({preventScroll:true})},50)}else ready(said.length>0);
+    }
+    inp.addEventListener('input',()=>ready(inp.value.trim()!==''));
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&inp.value.trim()){e.preventDefault();app.querySelector('#check').click()}});
+    box.querySelector('.d-mickb').addEventListener('click',()=>keyboard(true));
+    back.addEventListener('click',()=>keyboard(false));
+    btn.addEventListener('click',()=>{
+      if(locked)return;if(mic){micStop();return}
+      hush();heard.textContent='T\'escolto… parla ara';btn.classList.add('on');
+      micStart(r=>{
+        btn.classList.remove('on');if(locked)return;
+        if(r.err){
+          if(r.err==='not-allowed'||r.err==='service-not-allowed')return keyboard(true,'El micròfon no té permís. Escriu-ho…',true);
+          if(r.err==='network')return keyboard(true,'Per parlar cal internet. Escriu-ho…',true);
+          if(r.err==='aborted')return;
+          heard.textContent='No t\'he sentit. Prem el micròfon i torna-ho a provar.';return;
+        }
+        said=r.alts;tries++;
+        heard.innerHTML=`He sentit: <b>«${attr(said[0])}»</b>`;ready(true);
+        if(good(said))setTimeout(()=>{if(!locked)app.querySelector('#check').click()},600);
+        else heard.innerHTML+=`<br><small>${tries<3?'Torna-ho a provar amb el micròfon, o prem Comprova.':'Prem Comprova per continuar.'}</small>`;
+      });
+    });
+    let pref=true;try{pref=localStorage.getItem('cec-mic')!=='0'}catch(e){}
+    if(!SR)keyboard(true,null,true);else if(!pref)keyboard(true,null,true);
+    if(txt&&hear)setTimeout(()=>speak(txt),350);else if(!txt&&voiceOk)setTimeout(()=>speak(q.q),350);
+    return {check:()=>inp.hidden?good(said):good([inp.value]),right:model,say:model,
+      lock(ok){locked=true;micStop();btn.disabled=true;el.querySelectorAll('.d-mickb').forEach(b=>b.hidden=true);inp.disabled=true;inp.classList.add(ok?'right':'wrong');
+        if(txt&&hear&&!rep){const t=document.createElement('div');t.className='d-text glass pop';t.innerHTML=txt;el.querySelector('.d-listen').after(t)}}};
   },
   build(q,el,ready){return tiles(q,el,ready,`<div class="d-speaker"><img src="${IMG(FACES[q.ca.length%FACES.length])}" alt=""><p class="d-bubble2">${q.ca}</p></div>`)},
   listen(q,el,ready){

@@ -24,6 +24,7 @@ for (const u of [...window.REPAS, ...(window.LISTENING || [])]) {
     if (q.k === 'match') q.p.forEach(p => add(p[0]));
     if (q.k === 'spell') { add(q.en); }
     if (q.k === 'text' && q.hear) { add(q.txt); add(q.q) }
+    if (q.k === 'say') { if (q.en) add(q.en); else { add(q.q); add(q.m || [].concat(q.a)[0]); if (q.hear) add(q.txt) } }
   }
 }
 if (process.argv[1] && process.argv[1].endsWith('tts-texts.mjs')) process.stdout.write(JSON.stringify([...out].map(t => ({ key: sayKey(t), text: t })), null, 0));
