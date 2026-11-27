@@ -217,3 +217,20 @@ html[data-kid] .d-lbar .bar{flex:1;height:16px}
 .d-micback{display:block;margin:10px auto 0}
 .d-micback[hidden],.d-mic[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){.d-micbtn.on{animation:none;outline:6px solid rgba(232,85,74,.45)}}
+
+/* frase amb la part marcada (tipus mark: pronoms febles) */
+.d-mark{background:color-mix(in srgb,var(--teal) 18%,#fff);color:var(--teal);border-bottom:3px solid var(--teal);border-radius:8px;padding:0 .2em}
+.d-opts.col{grid-template-columns:1fr}
+.d-opts.col .d-opt{font-size:1.1rem;text-align:left;padding:14px 16px}
+.d-hintbtn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;border:2px solid rgba(35,55,85,.14);background:#fff;border-radius:999px;padding:6px 14px 6px 8px;font:inherit;font-weight:800;color:var(--ink);cursor:pointer}
+.d-hintbtn img{width:24px;height:24px}
+.d-hint2{margin:10px 0 0;padding:10px 12px;border-radius:14px;background:#fff8e1;color:var(--ink);font-weight:600;line-height:1.45}
+.d-step{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.d-step[hidden]{display:none}
+.d-stepq{margin:0;font-weight:800;font-size:1.1rem}
+.d-why2{margin:0;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.7);font-weight:600;line-height:1.4}
+.d-why2[hidden]{display:none}
+.d-tbl{display:block;overflow-x:auto;margin-top:12px;font-size:.95rem}
+.d-tbl table{border-collapse:collapse;width:100%;min-width:300px}
+.d-tbl th,.d-tbl td{border-bottom:1px solid rgba(35,55,85,.14);padding:8px 6px;text-align:left;vertical-align:top;line-height:1.4}
+.d-tbl th{font-size:.85rem;color:var(--muted)}

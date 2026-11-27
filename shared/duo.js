@@ -15,6 +15,8 @@
      text  {txt:"Text curt...", q:"Pregunta?", a:"resposta", o?:[altres opcions], hear?:true, ca?, alt?:[...]}
            comprensió: hear=true s'escolta (el text es mostra després de respondre), si no es llegeix.
            Amb o = tria; sense o = escriu (a o alt, sense majúscules ni puntuació).
+     mark  {s:"La [motxilla] pesa.", a:"Substantiu", o:[...], w?, h?, pre?:{q,a,o,w}}  frase amb la part marcada entre [ ] (o ___) i opcions.
+           t = enunciat. pre = primer pas (es respon tocant; si falla, ho torna a provar). h o unitat.hint = pista.
      say   parlar en veu alta (micròfon, SpeechRecognition en anglès; si no n'hi ha o no té permís, s'escriu):
            {en:"My name is Lucy.", ca?}  escolta i repeteix (val si diu el 75% de les paraules)
            {q:"How old is Lucy?", a:["nine"], m:"She is nine.", txt?, hear?, ca?}  respon: val si diu alguna de les a
@@ -195,7 +197,7 @@ function feedback(q,T,forced){
       <div><strong>${ok?cheer:'Gairebé!'}</strong>
         ${!ok&&T.right?`<p class="d-right">Resposta correcta: <b>${T.right}</b>${T.say?sayBtn(T.say,'sm'):''}</p>`:''}
         ${ok&&T.say?`<p class="d-right">${T.right||''}${sayBtn(T.say,'sm')}</p>`:''}
-        ${slip}${q.ca&&q.k!=='build'?`<p class="d-cat">${q.ca}</p>`:''}${q.w&&(!ok||q.k==='pick')?`<p class="d-why">${q.w}</p>`:''}
+        ${slip}${q.ca&&q.k!=='build'?`<p class="d-cat">${q.ca}</p>`:''}${q.w&&(!ok||q.k==='pick'||q.k==='mark')?`<p class="d-why">${q.w}</p>`:''}
       </div></div>
     <button type="button" class="btn d-check" id="cont">Continua</button></div>`;
   const cont=foot.querySelector('#cont');cont.focus({preventScroll:true});
@@ -282,6 +284,27 @@ const TYPES={
         if(opts)el.querySelectorAll('.d-opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.a)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});
         else{inp.disabled=true;inp.classList.add(ok?'right':'wrong')}
         if(hear){const t=document.createElement('div');t.className='d-text glass pop';t.innerHTML=q.txt;el.querySelector('.d-listen').after(t)}}};
+  },
+  mark(q,el,ready){
+    const opts=shuffle([q.a,...q.o]),hint=q.h||(L&&L.u.hint);
+    const sent=q.s.replace(/\[(.+?)\]/g,'<span class="d-mark">$1</span>').replace(/_{2,}/g,'<span class="d-blank">&nbsp;</span>');
+    const optHTML=os=>`<div class="d-opts${os.some(o=>o.length>16)?" col":""}">${os.map(o=>`<button type="button" class="d-opt" data-v="${attr(o)}">${o}</button>`).join('')}</div>`;
+    el.innerHTML=`<div class="d-q glass"><p class="d-sentence">${sent}</p>${hint?`<button type="button" class="d-hintbtn"><img src="${IMG('bulb')}" alt="">Pista</button><p class="d-hint2" hidden>${hint}</p>`:''}</div>
+      ${q.pre?`<div class="d-step"><p class="d-stepq"><b>1.</b> ${q.pre.q}</p>${optHTML(shuffle([q.pre.a,...q.pre.o]))}<p class="d-why2" hidden></p></div>
+        <div class="d-step" id="s2" hidden><p class="d-stepq"><b>2.</b> ${q.q}</p>${optHTML(opts)}</div>`:optHTML(opts)}`;
+    const hb=el.querySelector('.d-hintbtn');if(hb)hb.addEventListener('click',()=>{const h=el.querySelector('.d-hint2');h.hidden=!h.hidden});
+    let v=null;const fin=q.pre?el.querySelector('#s2'):el;
+    if(q.pre){
+      const st=el.querySelector('.d-step'),why=st.querySelector('.d-why2');
+      st.querySelectorAll('.d-opt').forEach(b=>b.addEventListener('click',()=>{
+        if(b.dataset.v===q.pre.a){SND.ok();st.querySelectorAll('.d-opt').forEach(x=>{x.disabled=true;x.classList.toggle('right',x===b)});
+          why.innerHTML=q.pre.w;why.hidden=false;fin.hidden=false;fin.classList.add('pop');setTimeout(()=>fin.scrollIntoView({behavior:'smooth',block:'nearest'}),50)}
+        else{SND.ko();b.disabled=true;b.classList.add('wrong');why.innerHTML='No és aquesta. Torna a llegir el verb i fes-li la pregunta.';why.hidden=false}
+      }));
+    }
+    choose(fin.querySelector('.d-opts'),'.d-opt',b=>{v=b.dataset.v;ready(true)});
+    return {check:()=>v===q.a,right:q.a,say:null,
+      lock(ok){fin.querySelectorAll('.d-opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.a)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')})}};
   },
   say(q,el,ready){
     const rep=!!q.en,voiceOk=C.voice!==false&&(hasVoice||C.audio),txt=rep?q.en:q.txt,hear=voiceOk&&(rep||q.hear);

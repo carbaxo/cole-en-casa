@@ -155,7 +155,7 @@ async function load(){
   app.innerHTML='<p class="empty">Carregant…</p>';
   let users,progress;
   try{
-    [users,progress]=await Promise.all([api('/collections/users/records?perPage=50'),api('/collections/progress/records?perPage=50'),loadScript('../shared/angles/repas.js'),loadScript('../shared/angles/listening.js'),loadScript('../shared/catala/curs.js'),loadScript('../shared/castella/curs.js'),loadScript('../shared/mates/gen.js').then(()=>Promise.all([loadScript('../shared/mates/mates4.js'),loadScript('../shared/mates/mates6.js')]))]);
+    [users,progress]=await Promise.all([api('/collections/users/records?perPage=50'),api('/collections/progress/records?perPage=50'),loadScript('../shared/angles/repas.js'),loadScript('../shared/angles/listening.js'),loadScript('../shared/catala/curs.js'),loadScript('../shared/castella/curs.js'),loadScript('../shared/catala/pronoms.js'),loadScript('../shared/mates/gen.js').then(()=>Promise.all([loadScript('../shared/mates/mates4.js'),loadScript('../shared/mates/mates6.js')]))]);
   }catch(e){if(e.message!=='auth')app.innerHTML=`<p class="err">No es pot connectar amb el NUC (${esc(e.message)}).</p><button class="btn" onclick="location.reload()">Torna-ho a provar</button>`;return}
   const byUser={};progress.items.forEach(p=>byUser[p.user]=p);
   const cards=[];
@@ -197,7 +197,7 @@ function kidCard(kid,cfg,rec){
     const got=Object.values(b).reduce((a,x)=>a+x,0),max=t.levels*3;totS+=got;totM+=max;
     let units='';
     /* unitats de cada curs (mateix fitxer que fa servir la pàgina del nen) */
-    const SRC={'mat-curs':grade>=6?window.MATES6:window.MATES4,'en-repas':window.REPAS,'en-listen':window.LISTENING,'ca-curs':window.CATALA,'es-curs':window.CASTELLA};
+    const SRC={'mat-curs':grade>=6?window.MATES6:window.MATES4,'en-repas':window.REPAS,'en-listen':window.LISTENING,'ca-curs':window.CATALA,'es-curs':window.CASTELLA,'pf-kids':window.PRONOMS};
     const US=SRC[t.key.replace(/-[^-]+$/,'')];
     if(US)units=US.filter(u=>!u.min||u.min<=grade).map(u=>`<div class="unit"><b>${esc(u.title)}</b>${stars(b[u.id]||0)}</div>`).join('');
     else units=Array.from({length:t.levels},(_,i)=>`<div class="unit"><b>Nivell ${i+1}</b>${stars(b[i]||0)}</div>`).join('');
